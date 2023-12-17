@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:poems_app/Auth/Widgets/text_input.dart';
+import 'package:poetry_app/Auth/Widgets/TextInput.dart';
 
 class PasswordInput extends TextInput {
   const PasswordInput(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:poems_app/Auth/Widgets/text_input.dart';
-import 'package:poems_app/Auth/Widgets/password_input.dart';
+import 'package:poetry_app/Auth/Widgets/TextInput.dart';
+import 'package:poetry_app/Auth/Widgets/PasswordInput.dart';
 import 'package:form_validator/form_validator.dart';
 
 class Login extends StatefulWidget {

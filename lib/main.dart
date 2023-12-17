@@ -5,12 +5,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Poetry app',
+      title: 'Flutter Demo',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           centerTitle: true,
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Poetry app"),
+          title: const Text("Poetry"),
         ),
         body: const Center(child: Text("Poetry app")),
       ),
