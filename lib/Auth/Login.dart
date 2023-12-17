@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Auth/Widgets/TextInput.dart';
 import 'package:poetry_app/Auth/Widgets/PasswordInput.dart';
 import 'package:form_validator/form_validator.dart';
@@ -28,6 +31,8 @@ class _LoginState extends State<Login> {
 
   static final String? Function(String?) _passwordValidator =
       ValidationBuilder().minLength(10).maxLength(255).build();
+
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +79,7 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
               ),
               onPressed: () {
-                // TO DO: sign in with google
+                var message = _authService.signInWithGoogle();
               },
               label: const Text("Sign in with Google"),
               icon: const Icon(FontAwesomeIcons.google),
