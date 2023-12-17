@@ -10,10 +10,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Poetry app',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+        ),
+      ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Main page"),
+          title: const Text("Poetry app"),
         ),
+        body: const Center(child: Text("Poetry app")),
       ),
     );
   }
