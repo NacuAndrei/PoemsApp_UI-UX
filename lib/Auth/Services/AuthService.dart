@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
 import 'package:poetry_app/firebase_options.dart';
 
+@singleton
 class AuthService {
   // instance of firebase auth
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /Poems/{userId}/Drafts/{draftId} {
+      allow read, write:
+      	// You have full access to your own drafts
+      	if request.auth.uid == userId;
+    }
+    
+    match /PublicPoems/{poemId} {
+    	// Anyone can read public poems
+    	allow read: 
+      	if true;
+        
+      // You can publish your own poems
+      allow create:
+      	if request.auth.uid == request.resource.data.user.userId;
+        
+      // You can delete your own poems
+    	allow delete:
+      	if request.auth.uid == 
+        	get(/databases/$(database)/documents/PublicPoems/$(poemId)).data.user.userId;
+    }
+
+		match /Poems/{userId}/Favourites/{poemId} {
+    	// You have full access to your favourites list
+    	allow read, write: 
+      	if request.auth.uid == userId;
+    }
+  }
+}

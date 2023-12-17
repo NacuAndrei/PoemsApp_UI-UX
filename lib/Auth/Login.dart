@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Auth/Widgets/TextInput.dart';
@@ -78,8 +79,9 @@ class _LoginState extends State<Login> {
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
               ),
-              onPressed: () {
-                var message = _authService.signInWithGoogle();
+              onPressed: () async {
+                var message =
+                    await GetIt.instance<AuthService>().signInWithGoogle();
               },
               label: const Text("Sign in with Google"),
               icon: const Icon(FontAwesomeIcons.google),
