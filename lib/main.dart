@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Login.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
+import 'package:poetry_app/Data/Services/DataService.dart';
+import 'package:poetry_app/FirestoreTest/FirestoreTestWidget.dart';
 import 'package:poetry_app/Auth/Signup.dart';
 import 'package:poetry_app/firebase_options.dart';
 import 'package:poetry_app/home.dart';
@@ -15,6 +17,7 @@ void main() async {
 
   // Register services
   GetIt.instance.registerSingleton<AuthService>(AuthService());
+  GetIt.instance.registerSingleton<DataService>(DataService());
 
   runApp(const MyApp());
 }
@@ -64,7 +67,8 @@ class MyApp extends StatelessWidget {
                     onPressed: () {
                       GetIt.instance<AuthService>().logOut();
                     },
-                    child: const Text("Sign out"))
+                    child: const Text("Sign out")),
+                const FirestoreTestWidget()
               ],
             ),
           );
