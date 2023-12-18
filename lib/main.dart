@@ -6,6 +6,7 @@ import 'package:poetry_app/Auth/Login.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Auth/Signup.dart';
 import 'package:poetry_app/firebase_options.dart';
+import 'package:poetry_app/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,6 +85,15 @@ class MyApp extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const Login()));
                   },
                   child: const Text("Login"),
+                ),
+                OutlinedButton(
+                  child: const Text("main page"),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                  },
                 ),
               ],
             ),
