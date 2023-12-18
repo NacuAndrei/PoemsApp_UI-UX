@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>348915233852-hhr0i8qsupgc7tr4229711h50uofbe0l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.348915233852-hhr0i8qsupgc7tr4229711h50uofbe0l</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>348915233852-1knmgbn8evvqte4o1cauq6918rmmo71j.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyByt3K_3Os1aIr3MOziZLHqbC8J7cDLwXE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>348915233852</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.poetryApp</string>
+	<key>PROJECT_ID</key>
+	<string>poetry-9df46</string>
+	<key>STORAGE_BUCKET</key>
+	<string>poetry-9df46.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:348915233852:ios:9d1bfb10f2bbc7062d3f39</string>
+</dict>
+</plist>

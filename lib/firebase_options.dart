@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,7 +44,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBidGUAzn4cS3lFvFpOAZbh1lQm7ZT7Ol0',
+    apiKey: 'AIzaSyBwQIwatTEhuMkwwywnr-GUYzBR1m6MU0s',
     appId: '1:348915233852:web:d0de8cccc010a56e2d3f39',
     messagingSenderId: '348915233852',
     projectId: 'poetry-9df46',
@@ -57,7 +54,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA9fbRppMreXQ-vyT7lJ_8_KMnPZhJrRNk',
+    apiKey: 'AIzaSyD9PsQgm215kznMFuEuEauNv9HvKi91-WI',
     appId: '1:348915233852:android:23785483b9288b252d3f39',
     messagingSenderId: '348915233852',
     projectId: 'poetry-9df46',
@@ -65,11 +62,23 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCl_KJKb_SV8nsMzQNARjT-szrkm1mdJQ4',
+    apiKey: 'AIzaSyByt3K_3Os1aIr3MOziZLHqbC8J7cDLwXE',
     appId: '1:348915233852:ios:9d1bfb10f2bbc7062d3f39',
     messagingSenderId: '348915233852',
     projectId: 'poetry-9df46',
     storageBucket: 'poetry-9df46.appspot.com',
+    androidClientId: '348915233852-1knmgbn8evvqte4o1cauq6918rmmo71j.apps.googleusercontent.com',
+    iosClientId: '348915233852-hhr0i8qsupgc7tr4229711h50uofbe0l.apps.googleusercontent.com',
+    iosBundleId: 'com.example.poetryApp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyByt3K_3Os1aIr3MOziZLHqbC8J7cDLwXE',
+    appId: '1:348915233852:ios:9d1bfb10f2bbc7062d3f39',
+    messagingSenderId: '348915233852',
+    projectId: 'poetry-9df46',
+    storageBucket: 'poetry-9df46.appspot.com',
+    androidClientId: '348915233852-1knmgbn8evvqte4o1cauq6918rmmo71j.apps.googleusercontent.com',
     iosClientId: '348915233852-hhr0i8qsupgc7tr4229711h50uofbe0l.apps.googleusercontent.com',
     iosBundleId: 'com.example.poetryApp',
   );

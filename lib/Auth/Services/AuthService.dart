@@ -9,8 +9,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // instance of _googleSignIn
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-      clientId: DefaultFirebaseOptions.currentPlatform.iosClientId);
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<String?> signInWithGoogle() async {
     try {

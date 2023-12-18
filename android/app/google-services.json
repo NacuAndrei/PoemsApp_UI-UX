@@ -14,13 +14,21 @@
       },
       "oauth_client": [
         {
+          "client_id": "348915233852-1knmgbn8evvqte4o1cauq6918rmmo71j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.poetry_app",
+            "certificate_hash": "77587d9e2d1752ad9e8eccc0aad92408e7621890"
+          }
+        },
+        {
           "client_id": "348915233852-fuef1ce4le90jj2pfls2sa1mu1p7k1s5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA9fbRppMreXQ-vyT7lJ_8_KMnPZhJrRNk"
+          "current_key": "AIzaSyD9PsQgm215kznMFuEuEauNv9HvKi91-WI"
         }
       ],
       "services": {
