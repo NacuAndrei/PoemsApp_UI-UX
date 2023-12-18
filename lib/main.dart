@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Login.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
+import 'package:poetry_app/Auth/Signup.dart';
 import 'package:poetry_app/firebase_options.dart';
 
 void main() async {
@@ -37,9 +38,11 @@ class MyApp extends StatelessWidget {
   // Listen to the auth state and display the appropriate screen
   Widget _getLandingPage() {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseAuth.instance.userChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+
           return Scaffold(
             appBar: AppBar(
               title: const Text("Poetry"),
@@ -47,7 +50,14 @@ class MyApp extends StatelessWidget {
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Center(child: Text("Poetry app")),
+                Center(
+                  child: Column(
+                    children: [
+                      Text("Poetry app"),
+                      Text("Hello ${snapshot.data?.displayName}"),
+                    ],
+                  ),
+                ),
                 OutlinedButton(
                     onPressed: () {
                       GetIt.instance<AuthService>().logOut();
@@ -57,7 +67,28 @@ class MyApp extends StatelessWidget {
             ),
           );
         } else {
-          return const Login();
+          return Scaffold(
+            appBar: AppBar(title: const Text("Poetry app")),
+            body: Column(
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const Signup()));
+                  },
+                  child: const Text("Sign up"),
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
+                  child: const Text("Login"),
+                ),
+              ],
+            ),
+          );
+          // return const Signup();
         }
       },
     );

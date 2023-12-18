@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'Services/AuthService.dart';
 import 'package:poetry_app/Auth/Widgets/TextInput.dart';
 import 'package:poetry_app/Auth/Widgets/PasswordInput.dart';
 import 'package:form_validator/form_validator.dart';
@@ -57,9 +59,15 @@ class _SignupState extends State<Signup> {
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // TO DO: send data to firebase
+                    String? message = await GetIt.instance<AuthService>()
+                        .signUpWithPassword(_nameController.text,
+                            _emailController.text, _passwordController.text);
+                    if (mounted && message != null) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(message)));
+                    }
                   }
                 },
                 child: const Text("Sign up")),
@@ -68,8 +76,13 @@ class _SignupState extends State<Signup> {
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
               ),
-              onPressed: () {
-                // TO DO: sign in with google
+              onPressed: () async {
+                String? message =
+                    await GetIt.instance<AuthService>().signInWithGoogle();
+                if (mounted && message != null) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(message)));
+                }
               },
               label: const Text("Sign in with Google"),
               icon: const Icon(FontAwesomeIcons.google),
