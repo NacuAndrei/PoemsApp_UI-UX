@@ -9,6 +9,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<String> poems = ["Floare albastra", "Glossa"];
+  List<String> poemsPreview = [
+    "-Iar te-ai cufundat in stele\nSi in nori si-n ceruri nalte?",
+    "-Ce te legeni, codrule,\nFara ploaie, fara vant,"
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,25 +29,25 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: [
                   Container(
-                    width: 150.0,
-                    height: 150.0,
+                    width: 100.0,
+                    height: 100.0,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         image: NetworkImage(
-                            "https://play-lh.googleusercontent.com/8ddL1kuoNUB5vUvgDVjYY3_6HwQcrg1K2fd_R8soD-e2QYj8fT9cfhfh3G0hnSruLKec"),
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Eminescu.jpg/330px-Eminescu.jpg"),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 24.0),
                   Text(
-                    "Sussy Writer",
+                    "Mihai Eminescu",
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    "writer.sussy@example.com",
+                    "-Poet-",
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],
@@ -63,22 +68,24 @@ class _ProfilePageState extends State<ProfilePage> {
               "Poems",
               style: Theme.of(context).textTheme.headline6,
             ),
-            const SizedBox(height: 8.0),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: const [
-                Chip(
-                  label: Text("Floare albastra"),
-                ),
-                Chip(
-                  label: Text("Ce te legeni?..."),
-                ),
-                Chip(
-                  label: Text("Glossa"),
-                ),
-              ],
-            ),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: poems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(poems[index],
+                                style: Theme.of(context).textTheme.subtitle2),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("${poemsPreview[index]}\n..."),
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    }))
           ],
         ),
       ),
