@@ -9,6 +9,8 @@ import 'package:poetry_app/FirestoreTest/FirestoreTestWidget.dart';
 import 'package:poetry_app/Auth/Signup.dart';
 import 'package:poetry_app/firebase_options.dart';
 import 'package:poetry_app/home.dart';
+import 'package:poetry_app/Auth/Signup.dart';
+import 'package:poetry_app/Compose/compose.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: _getLandingPage(),
+
+      // Change the starting screen of the app
+      //  initialRoute: '/compose',
+      //  routes: {
+      //    '/compose': (context) => const Compose(),
+      //  }
     );
   }
 
