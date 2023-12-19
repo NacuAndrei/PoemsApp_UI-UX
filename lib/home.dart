@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:poetry_app/Compose/compose.dart';
-
+import 'package:poetry_app/profile.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -49,8 +49,17 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => const Compose()));
                   },
                 ),
-                const GButton(
-                    gap: 10, icon: Icons.account_circle, text: "Profile"),
+                GButton(
+                  gap: 10,
+                  icon: Icons.account_circle,
+                  text: "Profile",
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                  },
+                ),
               ]),
         ),
       ),
