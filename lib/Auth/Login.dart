@@ -14,6 +14,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool loading = false;
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _resetPasswordEmailController =
       TextEditingController();
@@ -31,67 +32,83 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Log in')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-          children: [
-            TextInput(
-                controller: _emailController,
-                label: 'Email',
-                validator: _emailValidator),
-            const SizedBox(height: 20.0, width: null),
-            PasswordInput(
-                controller: _passwordController,
-                label: 'Password',
-                validator: _passwordValidator),
-            const SizedBox(height: 20.0, width: null),
-            InkWell(
-              child: const Text(
-                "Forgot your password?",
-                style: TextStyle(fontWeight: FontWeight.bold),
+      body: loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Form(
+              key: _formKey,
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 40.0, horizontal: 20.0),
+                children: [
+                  TextInput(
+                      controller: _emailController,
+                      label: 'Email',
+                      validator: _emailValidator),
+                  const SizedBox(height: 20.0, width: null),
+                  PasswordInput(
+                      controller: _passwordController,
+                      label: 'Password',
+                      validator: _passwordValidator),
+                  const SizedBox(height: 20.0, width: null),
+                  InkWell(
+                    child: const Text(
+                      "Forgot your password?",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      _forgotPasswordDialog(context);
+                    },
+                  ),
+                  const SizedBox(height: 20.0, width: null),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          String? message = await GetIt.instance<AuthService>()
+                              .signInWithPassword(_emailController.text,
+                                  _passwordController.text);
+                          setState(() {
+                            loading = false;
+                          });
+                          if (mounted && message != null) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(message)));
+                          }
+                        }
+                      },
+                      child: const Text("Log in")),
+                  const SizedBox(height: 20.0, width: null),
+                  OutlinedButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        loading = true;
+                      });
+                      String? message = await GetIt.instance<AuthService>()
+                          .signInWithGoogle();
+                      setState(() {
+                        loading = false;
+                      });
+                      if (mounted && message != null) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(message)));
+                      }
+                    },
+                    label: const Text("Sign in with Google"),
+                    icon: const Icon(FontAwesomeIcons.google),
+                  ),
+                ],
               ),
-              onTap: () {
-                _forgotPasswordDialog(context);
-              },
             ),
-            const SizedBox(height: 20.0, width: null),
-            ElevatedButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    String? message = await GetIt.instance<AuthService>()
-                        .signInWithPassword(
-                            _emailController.text, _passwordController.text);
-
-                    if (mounted && message != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(message)));
-                    }
-                  }
-                },
-                child: const Text("Log in")),
-            const SizedBox(height: 20.0, width: null),
-            OutlinedButton.icon(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-              ),
-              onPressed: () async {
-                String? message =
-                    await GetIt.instance<AuthService>().signInWithGoogle();
-                if (mounted && message != null) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(message)));
-                }
-              },
-              label: const Text("Sign in with Google"),
-              icon: const Icon(FontAwesomeIcons.google),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
