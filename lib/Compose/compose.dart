@@ -5,14 +5,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:poetry_app/Compose/preview.dart';
 
 class Compose extends StatefulWidget {
-  const Compose({ Key? key }) : super(key: key);
+  const Compose({Key? key}) : super(key: key);
 
   @override
   _ComposeState createState() => _ComposeState();
 }
 
 class _ComposeState extends State<Compose> {
-
   String? title;
   File? imageFile;
   String? poem;
@@ -22,11 +21,11 @@ class _ComposeState extends State<Compose> {
 
   // ImagePicker
   final picker = ImagePicker();
-  chooseImage(ImageSource source) async{
+  chooseImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
 
     setState(() {
-      if(pickedFile!=null) {
+      if (pickedFile != null) {
         imageFile = File(pickedFile.path);
       }
     });
@@ -35,27 +34,22 @@ class _ComposeState extends State<Compose> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Compose')),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(15),
           children: [
-
             // Title
             const Padding(
               padding: EdgeInsets.all(5),
-              child:
-              Text(
+              child: Text(
                 'Title',
-                style: TextStyle(
-                    fontSize: 20
-                ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
             TextFormField(
               autocorrect: false,
-              onChanged: (text){
+              onChanged: (text) {
                 title = text;
               },
               validator: (value) {
@@ -68,7 +62,6 @@ class _ComposeState extends State<Compose> {
                 hintText: 'Enter a title...',
                 hintStyle: TextStyle(color: Color.fromARGB(179, 129, 129, 129)),
                 border: OutlineInputBorder(),
-
               ),
             ),
             const SizedBox(height: 15, width: null),
@@ -76,33 +69,30 @@ class _ComposeState extends State<Compose> {
             // Image
             const Padding(
               padding: EdgeInsets.all(5),
-              child:
-              Text(
+              child: Text(
                 'Image(optional)',
-                style: TextStyle(
-                    fontSize: 20
-                ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
-            imageFile != null ? // Check if an image was picked
-            // if true: display that image
-            Padding(
-                padding: const EdgeInsets.all(5),
-                child:
-                FractionallySizedBox(
-                  widthFactor: 1,
-                  child: Image.file(imageFile!),
-                )
-            ):
-            // if false: don't show anything
-            Container(),
+            imageFile != null
+                ? // Check if an image was picked
+                // if true: display that image
+                Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Image.file(imageFile!),
+                    ))
+                :
+                // if false: don't show anything
+                Container(),
 
             // Select an image
             ElevatedButton(
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
-
               onPressed: () {
                 chooseImage(ImageSource.gallery);
               },
@@ -116,10 +106,9 @@ class _ComposeState extends State<Compose> {
                   SizedBox(
                     width: 5,
                   ),
-                  Text('Select an image',
-                    style: TextStyle(
-                        fontSize: 20
-                    ),
+                  Text(
+                    'Select an image',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
@@ -129,17 +118,14 @@ class _ComposeState extends State<Compose> {
             // Poem
             const Padding(
               padding: EdgeInsets.all(5),
-              child:
-              Text(
+              child: Text(
                 'Poem',
-                style: TextStyle(
-                    fontSize: 20
-                ),
+                style: TextStyle(fontSize: 20),
               ),
             ),
             TextFormField(
               autocorrect: false,
-              onChanged: (text){
+              onChanged: (text) {
                 poem = text;
               },
               validator: (value) {
@@ -171,29 +157,26 @@ class _ComposeState extends State<Compose> {
             // Buttons
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, bottom: 20),
-              child:
-              Row(
+              child: Row(
                 children: [
-
                   // Clear form button
                   SizedBox(
                       width: 130,
-                      child:
-                      ElevatedButton(
+                      child: ElevatedButton(
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                         ),
-
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) => const Compose(),
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const Compose(),
                               transitionDuration: Duration.zero,
                               reverseTransitionDuration: Duration.zero,
                             ),
                           );
-
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -205,42 +188,41 @@ class _ComposeState extends State<Compose> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text('Clear',
-                              style: TextStyle(
-                                  fontSize: 20
-                              ),
+                            Text(
+                              'Clear',
+                              style: TextStyle(fontSize: 20),
                             ),
                           ],
                         ),
-                      )
-                  ),
+                      )),
 
                   const Spacer(),
 
                   //Preview button
                   SizedBox(
                       width: 130,
-                      child:
-                      ElevatedButton(
+                      child: ElevatedButton(
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                         ),
-
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) => Preview(title: title, imageFile: imageFile, poem: poem,))
-                            );
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Preview(
+                                      title: title,
+                                      imageFile: imageFile,
+                                      poem: poem,
+                                    )));
                           }
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: const [
-                            Text('Preview',
-                              style: TextStyle(
-                                  fontSize: 20
-                              ),
+                            Text(
+                              'Preview',
+                              style: TextStyle(fontSize: 20),
                             ),
                             SizedBox(
                               width: 5,
@@ -251,14 +233,10 @@ class _ComposeState extends State<Compose> {
                             ),
                           ],
                         ),
-                      )
-                  ),
-
-
+                      )),
                 ],
               ),
             )
-
           ],
         ),
       ),

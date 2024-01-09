@@ -32,10 +32,6 @@ class _PoemListState extends State<PoemList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Favourites'),
-      ),
       body: GridView.builder(
         itemCount: _poems.length,
         itemBuilder: (context, index) {
