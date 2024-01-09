@@ -13,9 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  final screens = [
+    const Center(child: Text('Home')),
+    const Center(child: PoemList()),
+    const Center(child: Compose()),
+    const Center(child: ProfilePage()),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: screens[_selectedIndex],
       bottomNavigationBar: Container(
         color: Colors.black,
         child: Padding(
@@ -31,47 +39,53 @@ class _HomePageState extends State<HomePage> {
                   gap: 10,
                   icon: Icons.home_outlined,
                   text: "Home",
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()));
-                  },
+                  // onPressed: () {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const HomePage()));
+                  // },
                 ),
                 GButton(
                   gap: 10,
                   icon: Icons.favorite_border,
                   text: "Favourites",
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PoemList()));
-                  },
+                  // onPressed: () {
+                  // Navigator.push(
+                  // context,
+                  // MaterialPageRoute(
+                  // builder: (context) => const PoemList()));
+                  // },
                 ),
                 GButton(
                   gap: 10,
                   icon: Icons.edit_outlined,
                   text: "Compose",
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Compose()));
-                  },
+                  // onPressed: () {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const Compose()));
+                  // },
                 ),
                 GButton(
                   gap: 10,
                   icon: Icons.account_circle,
                   text: "Profile",
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ProfilePage()));
-                  },
+                  // onPressed: () {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const ProfilePage()));
+                  // },
                 ),
-              ]),
+              ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              }),
         ),
       ),
     );
