@@ -1,18 +1,28 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Compose/compose.dart';
-
+import 'package:poetry_app/Data/Models/PoemModel.dart';
+import 'package:poetry_app/Data/Services/DataService.dart';
 
 class Preview extends StatelessWidget {
   final String? title;
   final File? imageFile;
   final String? poem;
 
-  // TODO: get current username
-  final String author = "Author Name";
+  final String author =
+      GetIt.instance<AuthService>().getUserDisplayName() ?? "Unknown";
 
-  const Preview({ Key? key, required this.title, required this.imageFile, required this.poem, }) : super(key: key);
+  final String userId = GetIt.instance<AuthService>().getUserId() ?? "";
+
+  Preview({
+    Key? key,
+    required this.title,
+    required this.imageFile,
+    required this.poem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +32,6 @@ class Preview extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-
             // Title
             Text(
               title!,
@@ -35,29 +44,26 @@ class Preview extends StatelessWidget {
             const SizedBox(height: 15, width: null),
 
             // Image
-            imageFile != null ? // Check if an image was picked
-            // if true: display that image
-            Padding(
-                padding: const EdgeInsets.all(5),
-                child:
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child:
-                    FractionallySizedBox(
-                      widthFactor: 1,
-                      child: Image.file(imageFile!),
-                    )
-                )
-            ):
-            // if false: don't show anything
-            Container(),
+            imageFile != null
+                ? // Check if an image was picked
+                // if true: display that image
+                Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: FractionallySizedBox(
+                          widthFactor: 1,
+                          child: Image.file(imageFile!),
+                        )))
+                :
+                // if false: don't show anything
+                Container(),
             const SizedBox(height: 15, width: null),
 
             // Poem
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, bottom: 30),
-              child:
-              Text(
+              child: Text(
                 poem!,
                 style: const TextStyle(
                   fontSize: 20,
@@ -68,47 +74,45 @@ class Preview extends StatelessWidget {
             // Author
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, bottom: 20),
-              child:
-              Text(
-                "-$author",
-                style: const TextStyle(
-                    fontSize: 20,
-
-                    fontStyle: FontStyle.italic
-                ),
+              child: Text(
+                "- $author",
+                style:
+                    const TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
               ),
             ),
 
             //Submit button
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, bottom: 20),
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 ),
                 onPressed: () {
-
-                  // TODO: add poem to database
+                  // Add poem to database
+                  GetIt.instance<DataService>().addPoemDraft(
+                      userId,
+                      PoemModel(
+                          title: title ?? "Untitled", content: poem ?? ""));
 
                   // Clear poem and return to compose page
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => Compose(),
+                      pageBuilder: (context, animation1, animation2) =>
+                          Compose(),
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),
                   );
                 },
-                child: const Text('Submit',
-                  style: TextStyle(
-                      fontSize: 20
-                  ),
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ),
-
           ],
         ),
       ),

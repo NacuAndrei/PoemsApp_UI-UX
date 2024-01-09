@@ -20,7 +20,7 @@ class _ComposeState extends State<Compose> {
   // Key used to identify the form. Used for validation
   final _formKey = GlobalKey<FormState>();
 
-  // ImagePicker
+  // ImagePicker 
   final picker = ImagePicker();
   chooseImage(ImageSource source) async{
     final pickedFile = await picker.pickImage(source: source);
@@ -46,13 +46,13 @@ class _ComposeState extends State<Compose> {
             const Padding(
               padding: EdgeInsets.all(5),
               child:
-              Text(
-                'Title',
-                style: TextStyle(
+                Text(
+                  'Title',
+                  style: TextStyle(
                     fontSize: 20
+                  ),
                 ),
               ),
-            ),
             TextFormField(
               autocorrect: false,
               onChanged: (text){
@@ -68,41 +68,41 @@ class _ComposeState extends State<Compose> {
                 hintText: 'Enter a title...',
                 hintStyle: TextStyle(color: Color.fromARGB(179, 129, 129, 129)),
                 border: OutlineInputBorder(),
-
+                
               ),
             ),
             const SizedBox(height: 15, width: null),
 
-            // Image
+            // Image 
             const Padding(
               padding: EdgeInsets.all(5),
               child:
-              Text(
-                'Image(optional)',
-                style: TextStyle(
+                Text(
+                  'Image(optional)',
+                  style: TextStyle(
                     fontSize: 20
+                  ),
                 ),
               ),
-            ),
             imageFile != null ? // Check if an image was picked
-            // if true: display that image
-            Padding(
+              // if true: display that image
+              Padding(
                 padding: const EdgeInsets.all(5),
                 child:
-                FractionallySizedBox(
+                FractionallySizedBox( 
                   widthFactor: 1,
                   child: Image.file(imageFile!),
                 )
-            ):
-            // if false: don't show anything
-            Container(),
-
-            // Select an image
+              ): 
+              // if false: don't show anything
+              Container(), 
+              
+            // Select an image 
             ElevatedButton(
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
-
+              
               onPressed: () {
                 chooseImage(ImageSource.gallery);
               },
@@ -118,7 +118,7 @@ class _ComposeState extends State<Compose> {
                   ),
                   Text('Select an image',
                     style: TextStyle(
-                        fontSize: 20
+                      fontSize: 20
                     ),
                   ),
                 ],
@@ -130,13 +130,13 @@ class _ComposeState extends State<Compose> {
             const Padding(
               padding: EdgeInsets.all(5),
               child:
-              Text(
-                'Poem',
-                style: TextStyle(
+                Text(
+                  'Poem',
+                  style: TextStyle(
                     fontSize: 20
+                  ),
                 ),
               ),
-            ),
             TextFormField(
               autocorrect: false,
               onChanged: (text){
@@ -172,91 +172,91 @@ class _ComposeState extends State<Compose> {
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, bottom: 20),
               child:
-              Row(
-                children: [
-
-                  // Clear form button
-                  SizedBox(
+                Row(
+                  children: [
+                    
+                    // Clear form button
+                    SizedBox(
                       width: 130,
-                      child:
-                      ElevatedButton(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        ),
-
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) => const Compose(),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
-
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(
-                              Icons.refresh,
-                              size: 25,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text('Clear',
-                              style: TextStyle(
-                                  fontSize: 20
+                      child: 
+                        ElevatedButton(
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          ),
+                          
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context, 
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation1, animation2) => const Compose(),
+                                  transitionDuration: Duration.zero,
+                                  reverseTransitionDuration: Duration.zero,
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                  ),
-
-                  const Spacer(),
-
-                  //Preview button
-                  SizedBox(
-                      width: 130,
-                      child:
-                      ElevatedButton(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        ),
-
-                        onPressed: () {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) => Preview(title: title, imageFile: imageFile, poem: poem,))
                             );
-                          }
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Text('Preview',
-                              style: TextStyle(
-                                  fontSize: 20
+                            
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(
+                                Icons.refresh,
+                                size: 25,
                               ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 25,
-                            ),
-                          ],
-                        ),
-                      )
-                  ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('Clear',
+                                style: TextStyle(
+                                  fontSize: 20
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
 
+                    const Spacer(),
 
-                ],
-              ),
+                    //Preview button
+                    SizedBox(
+                      width: 130,
+                      child: 
+                        ElevatedButton(
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          ),
+                          
+                          onPressed: () {
+                            // Validate returns true if the form is valid, or false otherwise.
+                            if (_formKey.currentState!.validate()) {
+                              Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) => Preview(title: title, imageFile: imageFile, poem: poem,))
+                                );
+                            }
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text('Preview',
+                                style: TextStyle(
+                                  fontSize: 20
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 25,
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                    
+                    
+                  ],
+                ),
             )
 
           ],

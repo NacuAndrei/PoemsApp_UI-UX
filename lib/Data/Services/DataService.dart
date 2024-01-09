@@ -10,10 +10,14 @@ class DataService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<void> addPoemDraft(String userId, PoemModel poem) async {
-    _db
-        .collection("Poems/$userId/Drafts")
-        .add(poem.toMap())
-        .then((doc) => {log('Private poem added with ID: ${doc.id}')});
+    if (userId.isNotEmpty) {
+      _db
+          .collection("Poems/$userId/Drafts")
+          .add(poem.toMap())
+          .then((doc) => {log('Private poem added with ID: ${doc.id}')});
+    } else {
+      log("Warning: Empty user id");
+    }
   }
 
   Future<void> getPoemDrafts(String userId, List<PoemModel> poemDrafts) async {
