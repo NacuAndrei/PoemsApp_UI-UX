@@ -33,10 +33,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-        ),
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(centerTitle: true),
+        colorScheme: const ColorScheme.light().copyWith(primary: Colors.black),
       ),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.userChanges(),
