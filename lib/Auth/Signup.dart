@@ -78,7 +78,7 @@ class _SignupState extends State<Signup> {
                                   _passwordController.text);
 
                           setState(() {
-                            loading = true;
+                            loading = false;
                           });
                           if (mounted && message != null) {
                             ScaffoldMessenger.of(context)
@@ -101,7 +101,7 @@ class _SignupState extends State<Signup> {
                           .signInWithGoogle();
 
                       setState(() {
-                        loading = true;
+                        loading = false;
                       });
                       if (mounted && message != null) {
                         ScaffoldMessenger.of(context)
