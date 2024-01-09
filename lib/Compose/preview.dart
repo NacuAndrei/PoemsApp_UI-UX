@@ -94,14 +94,15 @@ class Preview extends StatelessWidget {
                   GetIt.instance<DataService>().addPoemDraft(
                       userId,
                       PoemModel(
-                          title: title ?? "Untitled", content: poem ?? ""));
+                          title: title ?? "Untitled", content: poem ?? ""),
+                      imageFile);
 
                   // Clear poem and return to compose page
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
-                          Compose(),
+                          const Compose(),
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),

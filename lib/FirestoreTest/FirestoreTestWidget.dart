@@ -30,10 +30,7 @@ class _FirestoreTestWidgetState extends State<FirestoreTestWidget> {
       ),
       onPressed: () {
         var userId = auth.getUserId();
-        if (userId != null) {
-          db.addPoemDraft(
-              userId, PoemModel(title: "title", content: "content"));
-        }
+        if (userId != null) {}
       },
       label: const Text("Add poem"),
       icon: const Icon(FontAwesomeIcons.plus),
