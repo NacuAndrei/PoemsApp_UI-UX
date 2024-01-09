@@ -36,32 +36,33 @@ class _PoemListState extends State<PoemList> {
         backgroundColor: Colors.black,
         title: const Text('Favourites'),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
         itemCount: _poems.length,
         itemBuilder: (context, index) {
           return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(_poems[index]),
-                  const SizedBox(height: 8),
-                  // RaisedButton(
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => PoemView(poem: _poems[index]),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Text('View Full Poem'),
-                  // ),
-                ],
-              ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, foregroundColor: Colors.black),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PoemView(poem: _poems[index]),
+                  ),
+                );
+              },
+              child: Column(children: [
+                Text(_poems[index]),
+                const SizedBox(height: 8),
+              ]),
             ),
           );
         },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
+        ),
       ),
     );
   }
