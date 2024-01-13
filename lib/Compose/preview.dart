@@ -98,15 +98,7 @@ class Preview extends StatelessWidget {
                       imageFile);
 
                   // Clear poem and return to compose page
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          const Compose(),
-                      transitionDuration: Duration.zero,
-                      reverseTransitionDuration: Duration.zero,
-                    ),
-                  );
+                  Navigator.pop(context, true);
                 },
                 child: const Text(
                   'Submit',
