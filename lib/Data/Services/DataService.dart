@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
+import 'package:poetry_app/Data/Models/FirebaseUser.dart';
 import 'package:poetry_app/Data/Models/PoemModel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:poetry_app/Data/Models/PublishedPoemModel.dart';
 
 @singleton
 class DataService {
@@ -43,5 +45,11 @@ class DataService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getPoemDrafts(String userId) {
     return _db.collection("Poems/$userId/Drafts").snapshots();
+  }
+
+  void publishPoem(PoemModel poem, FirebaseUser user) async {
+    PublishedPoemModel publishedPoem = PublishedPoemModel(poem.id, poem.title,
+        poem.content, poem.photoURL, Timestamp.now(), user);
+    _db.collection('PublicPoems').doc(poem.id).set(publishedPoem.toMap());
   }
 }

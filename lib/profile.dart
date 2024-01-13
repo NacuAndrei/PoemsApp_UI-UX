@@ -95,17 +95,36 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: ListView(
                     children: snapshot.data!.docs
                         .map((QueryDocumentSnapshot document) {
-                      PoemModel data = PoemModel.fromDocumentSnapshot(document
+                      PoemModel poem = PoemModel.fromDocumentSnapshot(document
                           as QueryDocumentSnapshot<Map<String, dynamic>>);
                       return Column(
                         children: [
                           ListTile(
-                            title: Text(data.title),
+                            title: Text(poem.title),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("${data.content}\n..."),
+                            child: Text("${poem.content}\n..."),
                           ),
+
+                          // Publish poem button
+                          ElevatedButton(
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                              ),
+                              onPressed: () async {
+                                var user = GetIt.instance
+                                    .get<AuthService>()
+                                    .getCurrentUserData();
+                                if (user != null) {
+                                  GetIt.instance
+                                      .get<DataService>()
+                                      .publishPoem(poem, user);
+                                }
+                              },
+                              child: const Text("Publish")),
+
                           const Divider(),
                         ],
                       );

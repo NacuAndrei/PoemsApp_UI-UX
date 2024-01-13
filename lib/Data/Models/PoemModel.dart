@@ -19,4 +19,10 @@ class PoemModel {
         title = doc.data()["title"],
         content = doc.data()["content"] ?? "",
         photoURL = doc.data()["photoURL"];
+
+  PoemModel.fromMap(Map<String, dynamic> map)
+      : id = map["id"],
+        title = map["title"],
+        content = map["content"] ?? "",
+        photoURL = map["photoURL"];
 }
