@@ -41,13 +41,7 @@ class DataService {
     }
   }
 
-  Future<void> getPoemDrafts(String userId, List<PoemModel> poemDrafts) async {
-    _db.collection("Poems/$userId/Drafts").snapshots().listen((event) {
-      poemDrafts.clear();
-      for (var doc in event.docs) {
-        poemDrafts.add(PoemModel.fromDocumentSnapshot(doc));
-      }
-      log("Loaded ${poemDrafts.length} poem drafts");
-    });
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPoemDrafts(String userId) {
+    return _db.collection("Poems/$userId/Drafts").snapshots();
   }
 }
