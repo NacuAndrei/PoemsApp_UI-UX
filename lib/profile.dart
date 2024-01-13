@@ -39,10 +39,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     width: 100.0,
                     height: 100.0,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: NetworkImage(
+                        image: NetworkImage(GetIt.instance
+                                .get<AuthService>()
+                                .getUserPhotoURL() ??
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Eminescu.jpg/330px-Eminescu.jpg"),
                         fit: BoxFit.cover,
                       ),
