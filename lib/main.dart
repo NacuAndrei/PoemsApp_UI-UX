@@ -5,10 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Login.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Auth/Signup.dart';
-import 'package:poetry_app/Compose/compose.dart';
 import 'package:poetry_app/Data/Services/DataService.dart';
-import 'package:poetry_app/FirestoreTest/FirestoreTestWidget.dart';
-import 'package:poetry_app/Auth/Signup.dart';
 import 'package:poetry_app/firebase_options.dart';
 import 'package:poetry_app/home.dart';
 
@@ -33,10 +30,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-        ),
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(centerTitle: true),
+        colorScheme: const ColorScheme.light().copyWith(primary: Colors.black),
       ),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.userChanges(),

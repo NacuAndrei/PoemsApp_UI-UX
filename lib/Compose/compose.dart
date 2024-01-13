@@ -35,7 +35,6 @@ class _ComposeState extends State<Compose> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Compose')),
       body: Form(
         key: _formKey,
         child: ListView(

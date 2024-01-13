@@ -14,6 +14,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  bool loading = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -35,61 +36,84 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign up')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
-          children: [
-            TextInput(
-                controller: _nameController,
-                label: 'User',
-                validator: _userValidator),
-            const SizedBox(height: 20.0, width: null),
-            TextInput(
-                controller: _emailController,
-                label: 'Email',
-                validator: _emailValidator),
-            const SizedBox(height: 20.0, width: null),
-            PasswordInput(
-                controller: _passwordController,
-                label: 'Password',
-                validator: _passwordValidator),
-            const SizedBox(height: 20.0, width: null),
-            ElevatedButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    String? message = await GetIt.instance<AuthService>()
-                        .signUpWithPassword(_nameController.text,
-                            _emailController.text, _passwordController.text);
-                    if (mounted && message != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(message)));
-                    }
-                  }
-                },
-                child: const Text("Sign up")),
-            const SizedBox(height: 20.0, width: null),
-            OutlinedButton.icon(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+      body: loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Form(
+              key: _formKey,
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 40.0, horizontal: 20.0),
+                children: [
+                  TextInput(
+                      controller: _nameController,
+                      label: 'User',
+                      validator: _userValidator),
+                  const SizedBox(height: 20.0, width: null),
+                  TextInput(
+                      controller: _emailController,
+                      label: 'Email',
+                      validator: _emailValidator),
+                  const SizedBox(height: 20.0, width: null),
+                  PasswordInput(
+                      controller: _passwordController,
+                      label: 'Password',
+                      validator: _passwordValidator),
+                  const SizedBox(height: 20.0, width: null),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+
+                          String? message = await GetIt.instance<AuthService>()
+                              .signUpWithPassword(
+                                  _nameController.text,
+                                  _emailController.text,
+                                  _passwordController.text);
+
+                          setState(() {
+                            loading = false;
+                          });
+                          if (mounted && message != null) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(message)));
+                          }
+                        }
+                      },
+                      child: const Text("Sign up")),
+                  const SizedBox(height: 20.0, width: null),
+                  OutlinedButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        loading = true;
+                      });
+
+                      String? message = await GetIt.instance<AuthService>()
+                          .signInWithGoogle();
+
+                      setState(() {
+                        loading = false;
+                      });
+                      if (mounted && message != null) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(message)));
+                      }
+                    },
+                    label: const Text("Sign in with Google"),
+                    icon: const Icon(FontAwesomeIcons.google),
+                  ),
+                ],
               ),
-              onPressed: () async {
-                String? message =
-                    await GetIt.instance<AuthService>().signInWithGoogle();
-                if (mounted && message != null) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(message)));
-                }
-              },
-              label: const Text("Sign in with Google"),
-              icon: const Icon(FontAwesomeIcons.google),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
