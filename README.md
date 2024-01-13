@@ -14,5 +14,5 @@ So far we have:
 ### Diagrams
 - [Activity Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/ActivityDiagram_WholeProject.jpeg) for whole future project (Whole team)
 - [Class Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/backend.md) for database (Mircea)
-- [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCaseDiagram_Profile.jpeg) for profile page (Andrei)
+- [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Login%26Profile_UseCase.png) for profile page (Andrei)
 - [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Compose%20poem%20use%20case%20diagram.png) for compose page (Alex)
