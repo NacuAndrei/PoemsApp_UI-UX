@@ -33,6 +33,14 @@ class AuthService {
     return _auth.currentUser?.uid;
   }
 
+  String? getUserDisplayName() {
+    return _auth.currentUser?.displayName;
+  }
+
+  String? getUserPhotoURL() {
+    return _auth.currentUser?.photoURL;
+  }
+
   Future<String?> signInWithPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(

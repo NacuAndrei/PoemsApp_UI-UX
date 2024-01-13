@@ -19,6 +19,13 @@ class _ComposeState extends State<Compose> {
   // Key used to identify the form. Used for validation
   final _formKey = GlobalKey<FormState>();
 
+  clearForm() {
+    setState(() {
+      _formKey.currentState?.reset();
+      imageFile = null;
+    });
+  }
+
   // ImagePicker
   final picker = ImagePicker();
   chooseImage(ImageSource source) async {
@@ -168,15 +175,7 @@ class _ComposeState extends State<Compose> {
                               horizontal: 10, vertical: 10),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  const Compose(),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
+                          clearForm();
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -209,12 +208,16 @@ class _ComposeState extends State<Compose> {
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Preview(
-                                      title: title,
-                                      imageFile: imageFile,
-                                      poem: poem,
-                                    )));
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                    builder: (context) => Preview(
+                                          title: title,
+                                          imageFile: imageFile,
+                                          poem: poem,
+                                        )))
+                                .then((submitted) => {
+                                      if (submitted) {clearForm()}
+                                    });
                           }
                         },
                         child: Row(

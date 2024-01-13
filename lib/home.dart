@@ -6,6 +6,7 @@ import 'package:poetry_app/profile.dart';
 import 'favourites.dart';
 import 'Auth/Services/AuthService.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -37,9 +38,9 @@ class _HomePageState extends State<HomePage> {
         shadowColor: Colors.transparent,
         actions: [
           TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-              ),
+            style:TextButton.styleFrom(
+          foregroundColor: Colors.white,
+      ),
               onPressed: () {
                 GetIt.instance<AuthService>().logOut();
               },
@@ -71,12 +72,12 @@ class _HomePageState extends State<HomePage> {
                   text: "Profile",
                 ),
               ],
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
+          selectedIndex: _selectedIndex,
+          onTabChange: (index) {
+            setState(() {
+              _selectedIndex = index;
+          });}
+          ),
         ),
       ),
     );
