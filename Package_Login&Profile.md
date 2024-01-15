@@ -1,5 +1,6 @@
 ## Package diagram pentru Login si Profile
 
+![Imagine](https://github.com/NacuAndrei/Poems_App/blob/main/Login%26Profile_Package.png)
 - Reprezinta structurarea logica a fisierelor legate de Login Si Profile
 
 - Pachetele Models, Widgets si Services grupeaza mai eficient unele fisiere
