@@ -31,4 +31,4 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 
 ### Mircea
 
-### Design patterns
+## Design patterns
