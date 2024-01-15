@@ -19,7 +19,7 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 - Basic UI pentru pagina de profil
 
 ### Diagrams
-- [Activity Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/ActivityDiagram_WholeProject.jpeg) for whole future project (Whole team)
+- [Activity Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/ActivityDiagram_WholeProject.md) for whole project (Whole team)
 - [Class Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/backend.md) for Firestore database (Mircea)
 - [Sequence Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/firtestore-rules-sequence-diagram.md) for Firestore security rules (Mircea)
 - [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCase_Login%26Profile.md) for login and profile (Andrei)
