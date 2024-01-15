@@ -1,4 +1,4 @@
-## Diagrama Use-case pentru Login si Profil (Andrei)
+## Use-case diagram pentru Login si Profile 
 
 ![Diagrama](https://github.com/NacuAndrei/Poems_App/blob/main/Login%26Profile_UseCase.png)
 - Fiecare chenar reprezinta o pagina din aplicatie, iar fiecare nod este o optiune pe care utilizatorul o poate alege.
