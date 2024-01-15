@@ -100,4 +100,8 @@ class DataService {
       String userId) {
     return _db.collection("Poems/$userId/Favourites").snapshots();
   }
+
+  Future<void> deleteDraft(String userId, String poemId) async {
+    await _db.collection("Poems/$userId/Drafts").doc(poemId).delete();
+  }
 }
