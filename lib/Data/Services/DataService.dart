@@ -60,7 +60,10 @@ class DataService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getPublishedPoems() {
-    return _db.collection("PublicPoems").snapshots();
+    return _db
+        .collection("PublicPoems")
+        .orderBy("publishedDate", descending: true)
+        .snapshots();
   }
 
   Future<void> addPoemToFavourites(String userId, String poemId) async {
