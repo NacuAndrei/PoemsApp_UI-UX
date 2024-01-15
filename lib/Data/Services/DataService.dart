@@ -107,4 +107,15 @@ class DataService {
   Future<void> deleteDraft(String userId, String poemId) async {
     await _db.collection("Poems/$userId/Drafts").doc(poemId).delete();
   }
+
+  Future<void> deletePublishedPoem(String userId, String poemId) async {
+    await _db.runTransaction((transaction) async {
+      DocumentReference draftRef =
+          _db.collection("Poems/$userId/Drafts").doc(poemId);
+      DocumentReference publicPoemRef =
+          _db.collection("PublicPoems").doc(poemId);
+      transaction.delete(draftRef);
+      transaction.delete(publicPoemRef);
+    });
+  }
 }

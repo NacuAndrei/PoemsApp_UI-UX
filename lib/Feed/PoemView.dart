@@ -243,11 +243,6 @@ class _PoemViewState extends State<PoemView> {
       return Container();
     }
 
-    // TO DO: remove this after we can delete public poems from firestore
-    if (!widget.isDraft || widget.poem.isPublished) {
-      return Container();
-    }
-
     // its either user's draft or published poem
     return ElevatedButton(
       onPressed: () {
@@ -291,8 +286,8 @@ class _PoemViewState extends State<PoemView> {
                       // delete published poem/draft
                       if (!widget.isDraft || widget.poem.isPublished) {
                         // disable button until poem is deleted
-                        await GetIt.instance<DataService>()
-                            .deleteDraft(userId, widget.poem.id as String);
+                        await GetIt.instance<DataService>().deletePublishedPoem(
+                            userId, widget.poem.id as String);
                       }
 
                       setState(() => processingDelete = false);
