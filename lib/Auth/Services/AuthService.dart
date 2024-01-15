@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:poetry_app/Data/Models/FirebaseUser.dart';
 import 'package:poetry_app/firebase_options.dart';
 
 @singleton
@@ -29,8 +30,28 @@ class AuthService {
     }
   }
 
+  FirebaseUser? getCurrentUserData() {
+    var user = _auth.currentUser;
+    if (user != null) {
+      return FirebaseUser(
+          userId: user.uid,
+          userEmail: user.email ?? "",
+          userName: user.displayName ?? "",
+          userPhotoURL: user.photoURL ?? "");
+    }
+    return null;
+  }
+
   String? getUserId() {
     return _auth.currentUser?.uid;
+  }
+
+  String? getUserDisplayName() {
+    return _auth.currentUser?.displayName;
+  }
+
+  String? getUserPhotoURL() {
+    return _auth.currentUser?.photoURL;
   }
 
   Future<String?> signInWithPassword(String email, String password) async {

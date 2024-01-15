@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Login.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
-import 'package:poetry_app/Data/Services/DataService.dart';
-import 'package:poetry_app/FirestoreTest/FirestoreTestWidget.dart';
 import 'package:poetry_app/Auth/Signup.dart';
+import 'package:poetry_app/Data/Services/DataService.dart';
 import 'package:poetry_app/firebase_options.dart';
 import 'package:poetry_app/home.dart';
 
@@ -31,81 +30,65 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-        ),
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(centerTitle: true),
+        colorScheme: const ColorScheme.light().copyWith(primary: Colors.black),
       ),
-      home: _getLandingPage(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.userChanges(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            return const HomePage();
+          } else {
+            return _guestHomePage(context);
+          }
+        },
+      ),
     );
   }
 
-  // Listen to the auth state and display the appropriate screen
-  Widget _getLandingPage() {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.userChanges(),
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.hasData) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Poetry"),
+  Widget _guestHomePage(context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Signup()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(18.0),
+                  child: Text("Sign up"),
+                ),
+              ),
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Text("Poetry app"),
-                      Text("Hello ${snapshot.data?.displayName}"),
-                    ],
-                  ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Login()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(18.0),
+                  child: Text("Login"),
                 ),
-                OutlinedButton(
-                    onPressed: () {
-                      GetIt.instance<AuthService>().logOut();
-                    },
-                    child: const Text("Sign out")),
-                const FirestoreTestWidget()
-              ],
+              ),
             ),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(title: const Text("Poetry app")),
-            body: Column(
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const Signup()));
-                  },
-                  child: const Text("Sign up"),
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const Login()));
-                  },
-                  child: const Text("Login"),
-                ),
-                OutlinedButton(
-                  child: const Text("main page"),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()));
-                  },
-                ),
-              ],
-            ),
-          );
-          // return const Signup();
-        }
-      },
+          ),
+        ],
+      ),
     );
   }
 }
