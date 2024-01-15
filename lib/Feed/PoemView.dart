@@ -124,11 +124,14 @@ class _PoemViewState extends State<PoemView> {
 
   Widget _getPublishButton() {
     if (widget.isDraft && showButton) {
-      return ElevatedButton(
-        style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 10.0)),
-        onPressed: () => _showPublishDialog(context),
-        child: const Text("Publish"),
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 10.0)),
+          onPressed: () => _showPublishDialog(context),
+          child: const Text("Publish"),
+        ),
       );
     } else {
       return Container();
