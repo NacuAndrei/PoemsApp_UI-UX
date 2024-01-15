@@ -50,7 +50,9 @@ class DataService {
   void publishPoem(PoemModel poem, FirebaseUser user) async {
     PublishedPoemModel publishedPoem = PublishedPoemModel(poem.id, poem.title,
         poem.content, poem.photoURL, Timestamp.now(), user);
-    _db.collection('PublicPoems').doc(poem.id).set(publishedPoem.toMap());
+    Map<String, dynamic> poemData = publishedPoem.toMap();
+    poemData.remove('isPublished');
+    _db.collection('PublicPoems').doc(poem.id).set(poemData);
     _db
         .collection('Poems/${user.userId}/Drafts')
         .doc(poem.id)
