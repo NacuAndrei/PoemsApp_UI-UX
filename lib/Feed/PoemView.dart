@@ -19,10 +19,24 @@ class PoemView extends StatefulWidget {
 
 class _PoemViewState extends State<PoemView> {
   bool showButton = false;
+  bool isFavourited = false;
 
   @override
   void initState() {
     showButton = widget.poem.isPublished == false;
+    if (!widget.isDraft) {
+      () async {
+        String? userId = GetIt.instance<AuthService>().getUserId();
+        if (userId == null || widget.poem.id == null) {
+          throw Exception("User or poem id is null in initState");
+        }
+        bool _isFavourited = await GetIt.instance<DataService>()
+            .isPoemFavourited(userId, widget.poem.id as String);
+        setState(() {
+          isFavourited = _isFavourited;
+        });
+      }();
+    }
     super.initState();
   }
 
@@ -30,7 +44,7 @@ class _PoemViewState extends State<PoemView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [_getPublishButton()],
+        actions: [_getPublishButton(), _getFavouriteButton()],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -172,6 +186,33 @@ class _PoemViewState extends State<PoemView> {
                 child: const Text("Publish"))
           ],
         );
+      },
+    );
+  }
+
+  Widget _getFavouriteButton() {
+    if (widget.isDraft) {
+      return Container();
+    }
+    return IconButton(
+      icon: Icon(isFavourited ? Icons.bookmark : Icons.bookmark_outline),
+      tooltip: isFavourited ? "Remove from favourites" : "Add to favourites",
+      onPressed: () async {
+        String? userId = GetIt.instance<AuthService>().getUserId();
+        if (userId == null || widget.poem.id == null) {
+          throw Exception("User or poem id is null");
+        }
+        if (isFavourited) {
+          await GetIt.instance<DataService>()
+              .removePoemFromFavourites(userId, widget.poem.id as String);
+        } else {
+          await GetIt.instance<DataService>()
+              .addPoemToFavourites(userId, widget.poem.id as String);
+        }
+
+        setState(() {
+          isFavourited = !isFavourited;
+        });
       },
     );
   }
