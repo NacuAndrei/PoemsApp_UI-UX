@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final screens = [
     const Center(child: Feed()),
-    const Center(child: PoemList()),
+    const Center(child: Favourites()),
     const Center(child: Compose()),
     const Center(child: ProfilePage()),
   ];

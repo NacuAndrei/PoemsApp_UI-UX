@@ -4,26 +4,30 @@ import 'package:poetry_app/Compose/compose.dart';
 import 'package:poetry_app/profile.dart';
 import 'package:poetry_app/home.dart';
 
-class PoemList extends StatefulWidget {
-  const PoemList({super.key});
+class Favourites extends StatefulWidget {
+  const Favourites({super.key});
   @override
-  State<PoemList> createState() => _PoemListState();
+  State<Favourites> createState() => _FavouritesState();
 }
 
-class _PoemListState extends State<PoemList> {
-  final List<String> _poems = [    '''
+class _FavouritesState extends State<Favourites> {
+  final List<String> _poems = [
+    '''
     Roses are red,
     Violets are blue,
     Sugar is sweet,
     And so are you.
-    ''',    '''
+    ''',
+    '''
     The world is full of magic things,
     Patiently waiting for our senses to grow sharper.
-    ''',    '''
+    ''',
+    '''
     The road to success is long and winding,
     But with hard work and determination,
     You will surely reach your destination.
-    ''',  ];
+    ''',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,38 +35,34 @@ class _PoemListState extends State<PoemList> {
       body: GridView.builder(
         itemCount: _poems.length,
         itemBuilder: (context, index) {
-          return  Card(
-            child:
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black
-                      ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PoemView(poem: _poems[index]),
-                        ),
-                      );
-                    },
-                    child: Column(
-                        children: [
-                        Text(_poems[index]),
-                    const SizedBox(height: 8),
-                  ]),
-              ),
+          return Card(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, foregroundColor: Colors.black),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PoemView(poem: _poems[index]),
+                  ),
+                );
+              },
+              child: Column(children: [
+                Text(_poems[index]),
+                const SizedBox(height: 8),
+              ]),
+            ),
           );
-        }, gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 5.0,
-        mainAxisSpacing: 5.0,
-      ),
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
+        ),
       ),
     );
   }
 }
-
 
 class PoemView extends StatelessWidget {
   final String poem;
