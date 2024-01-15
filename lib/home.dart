@@ -5,7 +5,7 @@ import 'package:poetry_app/Compose/compose.dart';
 import 'package:poetry_app/profile.dart';
 import 'favourites.dart';
 import 'Auth/Services/AuthService.dart';
-
+import 'package:poetry_app/Feed/Feed.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,8 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final screens = [
-    const Center(child: Text('Home')),
-    const Center(child: PoemList()),
+    const Center(child: Feed()),
+    const Center(child: Favourites()),
     const Center(child: Compose()),
     const Center(child: ProfilePage()),
   ];
@@ -38,9 +38,9 @@ class _HomePageState extends State<HomePage> {
         shadowColor: Colors.transparent,
         actions: [
           TextButton(
-            style:TextButton.styleFrom(
-          foregroundColor: Colors.white,
-      ),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 GetIt.instance<AuthService>().logOut();
               },
@@ -72,12 +72,12 @@ class _HomePageState extends State<HomePage> {
                   text: "Profile",
                 ),
               ],
-          selectedIndex: _selectedIndex,
-          onTabChange: (index) {
-            setState(() {
-              _selectedIndex = index;
-          });}
-          ),
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              }),
         ),
       ),
     );

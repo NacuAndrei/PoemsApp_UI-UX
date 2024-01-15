@@ -50,6 +50,72 @@ class DataService {
   void publishPoem(PoemModel poem, FirebaseUser user) async {
     PublishedPoemModel publishedPoem = PublishedPoemModel(poem.id, poem.title,
         poem.content, poem.photoURL, Timestamp.now(), user);
-    _db.collection('PublicPoems').doc(poem.id).set(publishedPoem.toMap());
+    Map<String, dynamic> poemData = publishedPoem.toMap();
+    poemData.remove('isPublished');
+    _db.collection('PublicPoems').doc(poem.id).set(poemData);
+    _db
+        .collection('Poems/${user.userId}/Drafts')
+        .doc(poem.id)
+        .update({"isPublished": true});
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPublishedPoems() {
+    return _db
+        .collection("PublicPoems")
+        .orderBy("publishedDate", descending: true)
+        .snapshots();
+  }
+
+  Future<void> addPoemToFavourites(String userId, String poemId) async {
+    try {
+      // get the poem  from PublicPoems collection
+      DocumentSnapshot poemToBeFavourited =
+          await _db.collection('PublicPoems').doc(poemId).get();
+
+      // get ref to the Favourites collection
+      CollectionReference collectionRef =
+          _db.collection('Poems/$userId/Favourites');
+
+      // add it to the Favourites collection
+      await collectionRef
+          .doc(poemToBeFavourited.id)
+          .set(poemToBeFavourited.data());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> removePoemFromFavourites(String userId, String poemId) async {
+    try {
+      // delete the poem  from favourites collection
+      await _db.collection('Poems/$userId/Favourites').doc(poemId).delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> isPoemFavourited(String userId, String poemId) async {
+    return (await _db.collection('Poems/$userId/Favourites').doc(poemId).get())
+        .exists;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFavouritedPoems(
+      String userId) {
+    return _db.collection("Poems/$userId/Favourites").snapshots();
+  }
+
+  Future<void> deleteDraft(String userId, String poemId) async {
+    await _db.collection("Poems/$userId/Drafts").doc(poemId).delete();
+  }
+
+  Future<void> deletePublishedPoem(String userId, String poemId) async {
+    await _db.runTransaction((transaction) async {
+      DocumentReference draftRef =
+          _db.collection("Poems/$userId/Drafts").doc(poemId);
+      DocumentReference publicPoemRef =
+          _db.collection("PublicPoems").doc(poemId);
+      transaction.delete(draftRef);
+      transaction.delete(publicPoemRef);
+    });
   }
 }
