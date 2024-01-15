@@ -51,6 +51,10 @@ class DataService {
     PublishedPoemModel publishedPoem = PublishedPoemModel(poem.id, poem.title,
         poem.content, poem.photoURL, Timestamp.now(), user);
     _db.collection('PublicPoems').doc(poem.id).set(publishedPoem.toMap());
+    _db
+        .collection('Poems/${user.userId}/Drafts')
+        .doc(poem.id)
+        .update({"isPublished": true});
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getPublishedPoems() {
