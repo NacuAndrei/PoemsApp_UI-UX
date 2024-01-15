@@ -127,7 +127,7 @@ class PoemListTile extends StatelessWidget {
 
   Widget _getListTileSubtitle() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Text(
         poem.content,
         maxLines: 3,
