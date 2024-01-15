@@ -18,12 +18,10 @@ class PoemView extends StatefulWidget {
 }
 
 class _PoemViewState extends State<PoemView> {
-  bool showButton = false;
   bool isFavourited = false;
 
   @override
   void initState() {
-    showButton = widget.poem.isPublished == false;
     if (!widget.isDraft) {
       () async {
         String? userId = GetIt.instance<AuthService>().getUserId();
@@ -44,7 +42,11 @@ class _PoemViewState extends State<PoemView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [_getPublishButton(), _getFavouriteButton()],
+        actions: [
+          _getPublishButton(),
+          _getFavouriteButton(),
+          _getDeleteButton(context)
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -137,7 +139,7 @@ class _PoemViewState extends State<PoemView> {
   }
 
   Widget _getPublishButton() {
-    if (widget.isDraft && showButton) {
+    if (widget.isDraft && !widget.poem.isPublished) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
@@ -156,35 +158,49 @@ class _PoemViewState extends State<PoemView> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Are you sure you want to publish the poem?"),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Cancel")),
-            TextButton(
-                onPressed: () async {
-                  var user =
-                      GetIt.instance.get<AuthService>().getCurrentUserData();
-                  if (user != null) {
-                    GetIt.instance
-                        .get<DataService>()
-                        .publishPoem(widget.poem, user);
-                  }
-                  setState(() {
-                    showButton = false;
-                  });
+        bool processingPublish = false;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            if (processingPublish) {
+              return const SimpleDialog(
+                children: [Center(child: CircularProgressIndicator())],
+              );
+            }
 
-                  Navigator.of(context).pop();
+            return AlertDialog(
+              title: const Text("Are you sure you want to publish the poem?"),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("Cancel")),
+                TextButton(
+                    onPressed: () async {
+                      var user = GetIt.instance
+                          .get<AuthService>()
+                          .getCurrentUserData();
+                      if (user != null) {
+                        setState(() => processingPublish = true);
+                        GetIt.instance
+                            .get<DataService>()
+                            .publishPoem(widget.poem, user);
+                        setState(() => processingPublish = false);
+                      }
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Poem published!'),
-                    ),
-                  );
-                },
-                child: const Text("Publish"))
-          ],
+                      if (mounted) {
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Poem published!'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text("Publish"))
+              ],
+            );
+          },
         );
       },
     );
@@ -213,6 +229,90 @@ class _PoemViewState extends State<PoemView> {
         setState(() {
           isFavourited = !isFavourited;
         });
+      },
+    );
+  }
+
+  Widget _getDeleteButton(BuildContext context) {
+    final String userId = GetIt.instance<AuthService>().getUserId() ?? "";
+    final bool userIsAuthor = widget.isDraft ||
+        (widget.poem as PublishedPoemModel).user.userId == userId;
+
+    // if current user is not the author, dont display button
+    if (!userIsAuthor) {
+      return Container();
+    }
+
+    // TO DO: remove this after we can delete public poems from firestore
+    if (!widget.isDraft || widget.poem.isPublished) {
+      return Container();
+    }
+
+    // its either user's draft or published poem
+    return ElevatedButton(
+      onPressed: () {
+        _showDeleteDialog(context);
+      },
+      child: const Text("Delete"),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context) {
+    final String userId = GetIt.instance<AuthService>().getUserId() ?? "";
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        bool processingDelete = false;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            if (processingDelete) {
+              return const SimpleDialog(
+                children: [Center(child: CircularProgressIndicator())],
+              );
+            }
+
+            return AlertDialog(
+              title: const Text("Are you sure you want to delete the poem?"),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("Cancel")),
+                TextButton(
+                    onPressed: () async {
+                      // disable button until poem is deleted
+                      setState(() => processingDelete = true);
+
+                      // delete unpublished draft
+                      if (widget.isDraft && widget.poem.isPublished == false) {
+                        await GetIt.instance<DataService>()
+                            .deleteDraft(userId, widget.poem.id as String);
+                      }
+                      // delete published poem/draft
+                      if (!widget.isDraft || widget.poem.isPublished) {
+                        // disable button until poem is deleted
+                        await GetIt.instance<DataService>()
+                            .deleteDraft(userId, widget.poem.id as String);
+                      }
+
+                      setState(() => processingDelete = false);
+
+                      if (mounted) {
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Poem deleted!'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text("Delete"))
+              ],
+            );
+          },
+        );
       },
     );
   }
