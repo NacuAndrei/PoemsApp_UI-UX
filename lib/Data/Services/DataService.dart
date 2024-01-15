@@ -62,4 +62,37 @@ class DataService {
   Stream<QuerySnapshot<Map<String, dynamic>>> getPublishedPoems() {
     return _db.collection("PublicPoems").snapshots();
   }
+
+  Future<void> addPoemToFavourites(String userId, String poemId) async {
+    try {
+      // get the poem  from PublicPoems collection
+      DocumentSnapshot poemToBeFavourited =
+          await _db.collection('PublicPoems').doc(poemId).get();
+
+      // get ref to the Favourites collection
+      CollectionReference collectionRef =
+          _db.collection('Poems/$userId/Favourites');
+
+      // add it to the Favourites collection
+      await collectionRef
+          .doc(poemToBeFavourited.id)
+          .set(poemToBeFavourited.data());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> removePoemFromFavourites(String userId, String poemId) async {
+    try {
+      // delete the poem  from favourites collection
+      await _db.collection('Poems/$userId/Favourites').doc(poemId).delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> isPoemFavourited(String userId, String poemId) async {
+    return (await _db.collection('Poems/$userId/Favourites').doc(poemId).get())
+        .exists;
+  }
 }
