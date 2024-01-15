@@ -31,7 +31,7 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 ### Team Member's Contribution
 
 - Mircea: Firestore database and security rules. Firebase auth.
-- Andrei:
+- Andrei: UI and some basic functionalities for Login
 - Alex:
 
 ### Design Patterns
