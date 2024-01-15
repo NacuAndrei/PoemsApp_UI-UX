@@ -32,14 +32,7 @@ class PoemListTile extends StatelessWidget {
           title: _getListTileTitle(),
           subtitle: _getListTileSubtitle(),
           onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(),
-                body: SingleChildScrollView(
-                  child: PoemView(poem: poem),
-                ),
-              ),
-            ),
+            MaterialPageRoute(builder: (context) => PoemView(poem: poem)),
           ),
         ),
       ),
