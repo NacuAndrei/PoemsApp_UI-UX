@@ -10,7 +10,7 @@ class PoemModel {
   String? photoURL;
 
   Map<String, dynamic> toMap() {
-    return {'title': title, 'content': content};
+    return {'title': title, 'content': content, 'photoURL': photoURL};
   }
 
   PoemModel.fromDocumentSnapshot(
