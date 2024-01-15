@@ -6,11 +6,24 @@ import 'package:intl/intl.dart';
 import '../Auth/Services/AuthService.dart';
 import '../Data/Services/DataService.dart';
 
-class PoemView extends StatelessWidget {
+class PoemView extends StatefulWidget {
   final PoemModel poem;
-  late final bool isPublished;
+  late final bool isDraft;
   PoemView({super.key, required this.poem}) {
-    isPublished = poem is PublishedPoemModel;
+    isDraft = poem is! PublishedPoemModel;
+  }
+
+  @override
+  State<PoemView> createState() => _PoemViewState();
+}
+
+class _PoemViewState extends State<PoemView> {
+  bool showButton = false;
+
+  @override
+  void initState() {
+    showButton = widget.poem.isPublished == false;
+    super.initState();
   }
 
   @override
@@ -36,7 +49,7 @@ class PoemView extends StatelessWidget {
       padding: const EdgeInsets.only(top: 24.0),
       child: Center(
         child: Text(
-          poem.title,
+          widget.poem.title,
           textScaleFactor: 1.65,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
@@ -45,8 +58,9 @@ class PoemView extends StatelessWidget {
   }
 
   Widget _getAuthorWidget() {
-    return isPublished
-        ? Padding(
+    return widget.isDraft
+        ? Container()
+        : Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Column(
               children: [
@@ -56,7 +70,7 @@ class PoemView extends StatelessWidget {
                     const Text("by"),
                     const SizedBox(width: 5.0),
                     Text(
-                      (poem as PublishedPoemModel).user.userName,
+                      (widget.poem as PublishedPoemModel).user.userName,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                       textScaleFactor: 1.2,
                     ),
@@ -69,14 +83,15 @@ class PoemView extends StatelessWidget {
                     const SizedBox(width: 5.0),
                     Text(
                       DateFormat('dd/MM/yyyy hh:mm').format(
-                          (poem as PublishedPoemModel).publishedDate.toDate()),
+                          (widget.poem as PublishedPoemModel)
+                              .publishedDate
+                              .toDate()),
                     ),
                   ],
                 )
               ],
             ),
-          )
-        : Container();
+          );
   }
 
   Widget _getContentWidget() {
@@ -84,36 +99,71 @@ class PoemView extends StatelessWidget {
         padding: const EdgeInsets.only(top: 16.0),
         child: Center(
           child: Text(
-            poem.content,
+            widget.poem.content,
           ),
         ));
   }
 
   Widget _getImageWidget() {
-    return poem.photoURL != null
+    return widget.poem.photoURL != null
         ? Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
-              child: Image.network(poem.photoURL as String),
+              child: Image.network(widget.poem.photoURL as String),
             ),
           )
         : Container();
   }
 
   Widget _getPublishButton() {
-    return isPublished
-        ? Container()
-        : ElevatedButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-            ),
-            onPressed: () async {
-              var user = GetIt.instance.get<AuthService>().getCurrentUserData();
-              if (user != null) {
-                GetIt.instance.get<DataService>().publishPoem(poem, user);
-              }
-            },
-            child: const Text("Publish"));
+    if (widget.isDraft && showButton) {
+      return ElevatedButton(
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 10.0)),
+        onPressed: () => _showPublishDialog(context),
+        child: const Text("Publish"),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  void _showPublishDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Are you sure you want to publish the poem?"),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel")),
+            TextButton(
+                onPressed: () async {
+                  var user =
+                      GetIt.instance.get<AuthService>().getCurrentUserData();
+                  if (user != null) {
+                    GetIt.instance
+                        .get<DataService>()
+                        .publishPoem(widget.poem, user);
+                  }
+                  setState(() {
+                    showButton = false;
+                  });
+
+                  Navigator.of(context).pop();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Poem published!'),
+                    ),
+                  );
+                },
+                child: const Text("Publish"))
+          ],
+        );
+      },
+    );
   }
 }
