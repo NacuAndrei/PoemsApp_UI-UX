@@ -28,18 +28,24 @@ class _PoemViewState extends State<PoemView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _getTitleWidget(),
-          _getAuthorWidget(),
-          _getImageWidget(),
-          _getContentWidget(),
-          _getPublishButton(),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        actions: [_getPublishButton()],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _getTitleWidget(),
+              _getAuthorWidget(),
+              _getImageWidget(),
+              _getContentWidget(),
+            ],
+          ),
+        ),
       ),
     );
   }
