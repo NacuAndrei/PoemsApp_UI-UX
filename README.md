@@ -36,4 +36,4 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 
 ### Design Patterns
 
-- Singleton
+- [Design Patterns](https://github.com/NacuAndrei/Poems_App/blob/main/design-patterns.md)
