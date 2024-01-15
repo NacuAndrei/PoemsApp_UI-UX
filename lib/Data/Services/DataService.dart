@@ -95,4 +95,9 @@ class DataService {
     return (await _db.collection('Poems/$userId/Favourites').doc(poemId).get())
         .exists;
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFavouritedPoems(
+      String userId) {
+    return _db.collection("Poems/$userId/Favourites").snapshots();
+  }
 }
