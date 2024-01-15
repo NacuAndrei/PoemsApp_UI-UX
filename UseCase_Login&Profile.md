@@ -1,5 +1,6 @@
 ## Diagrama Use-case pentru Login si Profil (Andrei)
 
+![Diagrama](https://github.com/NacuAndrei/Poems_App/blob/main/Login%26Profile_UseCase.png)
 - Fiecare chenar reprezinta o pagina din aplicatie, iar fiecare nod este o optiune pe care utilizatorul o poate alege.
 
 - Ramura "Extend" descrie cum nodul urmator poate fi efectuat sau nu, dar daca este efectuat, atunci si nodul anterior a fost efectuat.
