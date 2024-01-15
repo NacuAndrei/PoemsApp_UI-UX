@@ -1,62 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Data/Models/PoemModel.dart';
-import 'package:poetry_app/Feed/Poem.dart';
 
-class PoemList extends StatelessWidget {
-  final List<PoemModel> poems;
-  final bool showAuthor;
-  const PoemList({super.key, required this.poems, this.showAuthor = true});
+import '../Data/Models/PublishedPoemModel.dart';
+import '../Data/Services/DataService.dart';
+import 'PoemListTile.dart';
 
+class PoemList extends StatefulWidget {
+  const PoemList(
+      {super.key, required this.poemsStream, required this.published});
+  final Stream<QuerySnapshot<Map<String, dynamic>>> poemsStream;
+  final bool published;
+  @override
+  State<PoemList> createState() => _PoemListState();
+}
+
+class _PoemListState extends State<PoemList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        separatorBuilder: (context, index) => const Divider(),
-        itemCount: poems.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: _getListTileTitle(index),
-            subtitle: _getListTileSubtitle(index),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) {
-                return Scaffold(
-                  appBar: AppBar(),
-                  body: SingleChildScrollView(
-                    child: Poem(poem: poems[index]),
-                  ),
-                );
-              }),
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: widget.poemsStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error"));
+        }
+        if (snapshot.hasData) {
+          return ListView.separated(
+            separatorBuilder: (context, index) => const Divider(
+              color: Colors.black12,
+              thickness: 1.2,
             ),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              final QueryDocumentSnapshot<Map<String, dynamic>> poemSnapshot =
+                  snapshot.data!.docs[index];
+              PoemModel poemModel = widget.published
+                  ? PublishedPoemModel.fromDocumentSnapshot(poemSnapshot)
+                  : PoemModel.fromDocumentSnapshot(poemSnapshot);
+
+              return PoemListTile(
+                poem: poemModel,
+                context: context,
+                showAuthor: widget.published,
+              );
+            },
           );
-        });
-  }
-
-  Widget _getListTileTitle(int index) {
-    final poemTitle = poems[index].title;
-    final poemAuthor = "Mihai Eminescu";
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text(poemTitle,
-              textScaleFactor: 1.2, overflow: TextOverflow.ellipsis),
-          showAuthor
-              ? Center(
-                  child: Text(
-                    "- $poemAuthor -",
-                    style: const TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-    );
-  }
-
-  Widget _getListTileSubtitle(int index) {
-    return Text(
-      poems[index].content,
-      maxLines: 4,
-      overflow: TextOverflow.fade,
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
