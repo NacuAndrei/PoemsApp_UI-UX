@@ -58,3 +58,20 @@ class PoemModel {
 ```
 
 Un alt avantaj este  Separarea Concern-urilor. DTO permite separarea reprezentării datelor de logica de afaceri.
+
+### Facade Pattern
+
+Facade Pattern este un design pattern structural care oferă o interfață simplificată pentru a accesa un set complex de interfețe sau un sistem complex. Scopul principal al acestui pattern este de a oferi o interfață de nivel înalt, ușor de înțeles și de utilizat, care abstractizează implementările mai complexe și mai detaliate din spatele său.
+
+În clasa `AuthService` din aplicație, Facade Pattern este implementat pentru a abstractiza interacțiunile cu Firebase Authentication și Google Sign-In. De exemplu:
+
+-   Metoda `signInWithGoogle` abstractizează pașii necesari pentru autentificarea cu Google, ascunzând detaliile legate de obținerea token-urilor de autentificare și interacțiunea cu API-ul Firebase.
+-   Metodele `signInWithPassword`, `signUpWithPassword`, și `resetPassword` oferă acces simplificat la funcționalitățile specifice de autentificare Firebase, fără a expune complexitatea interacțiunilor de rețea și gestionarea erorilor.
+
+### Repository Pattern
+
+Repository Pattern este un design pattern folosit pentru a abstractiza logica de acces la date.
+
+În clasa `DataService`, Repository Pattern este implementat pentru a gestiona operațiunile legate de datele poemelor:
+
+Metodele  `addPoemDraft`, `publishPoem`, `deleteDraft`, `addPoemToFavourites`, etc gestionează operațiuni specifice pe datele poemelor. `DataService` ascunde detaliile implementării, cum ar fi interacțiunile cu Firebase Firestore, de restul aplicației.
