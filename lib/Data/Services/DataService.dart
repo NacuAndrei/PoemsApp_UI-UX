@@ -52,4 +52,8 @@ class DataService {
         poem.content, poem.photoURL, Timestamp.now(), user);
     _db.collection('PublicPoems').doc(poem.id).set(publishedPoem.toMap());
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPublishedPoems() {
+    return _db.collection("PublicPoems").snapshots();
+  }
 }
