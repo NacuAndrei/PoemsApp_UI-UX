@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
+
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:get_it/get_it.dart';
+
 import 'package:poetry_app/Data/Models/PoemModel.dart';
 
 import '../Data/Models/PublishedPoemModel.dart';
-import '../Data/Services/DataService.dart';
+
 import 'PoemListTile.dart';
 
 class PoemList extends StatefulWidget {
@@ -28,11 +28,7 @@ class _PoemListState extends State<PoemList> {
           return const Center(child: Text("Error"));
         }
         if (snapshot.hasData) {
-          return ListView.separated(
-            separatorBuilder: (context, index) => const Divider(
-              color: Colors.black12,
-              thickness: 1.2,
-            ),
+          return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final QueryDocumentSnapshot<Map<String, dynamic>> poemSnapshot =
@@ -41,10 +37,12 @@ class _PoemListState extends State<PoemList> {
                   ? PublishedPoemModel.fromDocumentSnapshot(poemSnapshot)
                   : PoemModel.fromDocumentSnapshot(poemSnapshot);
 
-              return PoemListTile(
-                poem: poemModel,
-                context: context,
-                showAuthor: widget.published,
+              return Container(
+                child: PoemListTile(
+                  poem: poemModel,
+                  context: context,
+                  showAuthor: widget.published,
+                ),
               );
             },
           );

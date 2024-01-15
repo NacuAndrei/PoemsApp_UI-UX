@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
-import 'package:poetry_app/Data/Models/PoemModel.dart';
+
 import 'package:poetry_app/Data/Services/DataService.dart';
 import 'package:poetry_app/Feed/PoemList.dart';
 
@@ -30,45 +30,25 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SizedBox(
-              child: Column(
-                children: [
-                  Container(
-                    width: 100.0,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(GetIt.instance
-                                .get<AuthService>()
-                                .getUserPhotoURL() ??
-                            "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Eminescu.jpg/330px-Eminescu.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24.0),
-                  Text(
-                    GetIt.instance.get<AuthService>().getUserDisplayName() ??
-                        "Unknown",
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    "-Poet-",
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
-                ],
+            ClipOval(
+              child: Image(
+                image: NetworkImage(GetIt.instance
+                        .get<AuthService>()
+                        .getUserPhotoURL() ??
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Eminescu.jpg/330px-Eminescu.jpg"),
+                width: 100,
+                fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(height: 32.0),
+            const SizedBox(height: 24.0),
             Text(
-              "About me",
-              style: Theme.of(context).textTheme.headline6,
+              GetIt.instance.get<AuthService>().getUserDisplayName() ??
+                  "Unknown",
+              style: Theme.of(context).textTheme.headline5,
             ),
             const SizedBox(height: 8.0),
             Text(
@@ -80,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
               "Poems",
               style: Theme.of(context).textTheme.headline6,
             ),
+            const SizedBox(height: 8.0),
             Expanded(
               child: PoemList(
                 poemsStream: _poemDraftsStream,
