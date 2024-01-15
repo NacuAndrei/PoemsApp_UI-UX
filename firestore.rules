@@ -12,14 +12,9 @@ service cloud.firestore {
     	allow read: 
       	if true;
         
-      // You can publish your own poems
-      allow create:
+      // You can publish and delete your own poems
+      allow create, delete:
       	if request.auth.uid == request.resource.data.user.userId;
-        
-      // You can delete your own poems
-    	allow delete:
-      	if request.auth.uid == 
-        	get(/databases/$(database)/documents/PublicPoems/$(poemId)).data.user.userId;
     }
 
 		match /Poems/{userId}/Favourites/{poemId} {
