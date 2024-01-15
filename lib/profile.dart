@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Auth/Services/AuthService.dart';
 import 'package:poetry_app/Data/Models/PoemModel.dart';
 import 'package:poetry_app/Data/Services/DataService.dart';
+import 'package:poetry_app/Feed/PoemList.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -79,59 +80,11 @@ class _ProfilePageState extends State<ProfilePage> {
               "Poems",
               style: Theme.of(context).textTheme.headline6,
             ),
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: _poemDraftsStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Something went wrong');
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("Loading...");
-                }
-
-                return Expanded(
-                  child: ListView(
-                    children: snapshot.data!.docs
-                        .map((QueryDocumentSnapshot document) {
-                      PoemModel poem = PoemModel.fromDocumentSnapshot(document
-                          as QueryDocumentSnapshot<Map<String, dynamic>>);
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(poem.title),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("${poem.content}\n..."),
-                          ),
-
-                          // Publish poem button
-                          ElevatedButton(
-                              style: TextButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
-                              ),
-                              onPressed: () async {
-                                var user = GetIt.instance
-                                    .get<AuthService>()
-                                    .getCurrentUserData();
-                                if (user != null) {
-                                  GetIt.instance
-                                      .get<DataService>()
-                                      .publishPoem(poem, user);
-                                }
-                              },
-                              child: const Text("Publish")),
-
-                          const Divider(),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                );
-              },
+            Expanded(
+              child: PoemList(
+                poemsStream: _poemDraftsStream,
+                published: false,
+              ),
             ),
           ],
         ),
