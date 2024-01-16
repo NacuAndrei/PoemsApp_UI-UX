@@ -11,4 +11,4 @@
 
 - Pentru variabile, simbolul "+" semnifica faptul ca variabila este publica, iar "-" este pentru variabilele private;
 
-- Am aranjat ierarhic si orientarea pachetelor in diagrama: Paginile principale se afla cel mai jos, in timp ce modelele sunt cel mai sus.
+- Am aranjat ierarhic si orientarea pachetelor in diagrama: Paginile principale se afla cel mai jos, in timp ce modelele sunt in partea de sus.
