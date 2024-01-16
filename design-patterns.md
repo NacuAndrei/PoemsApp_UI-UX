@@ -17,7 +17,7 @@ GetIt.instance.registerSingleton<DataService>(DataService());
 Aceste servicii se pot folosi apoi din orice componenta, avand ca avantaj ca nu este nevoie sa pasezi o instanta de la parinte la copii. Este o practica des intalnita ca servicii precum cel de autentificare
 si cel de management al datelor sa fie o singura instanta care sa se ocupe de functionalitati in intreaga aplicatie. 
 
-De exemplu, AuthService este folosit in pagina de Login, encapsuland logica pentru:
+De exemplu, clasa `AuthService` este folosita in pagina de `Login`, encapsuland logica pentru:
 - logarea cu email/parola;
 ``` dart
 String? message = await GetIt.instance<AuthService>()
@@ -43,8 +43,8 @@ String? message = await GetIt.instance<AuthService>()
                                   _resetPasswordEmailController.text);
 ```
 
-DataService actioneaza ca un intermediar intre Firebase si aplicatie si permite diferite interactiuni (adaugarea/stergerea unei poezii, adaugarea/stergea ei in lista de favorite) dintre utilizator si poezii. 
-In pagina profilului DataService este folosit pentru a prelua si afisa draft-urile utilizatorului logat: 
+`DataService` actioneaza ca un intermediar intre Firebase si aplicatie si permite diferite interactiuni (adaugarea/stergerea unei poezii, adaugarea/stergea ei in lista de favorite) dintre utilizator si poezii. 
+In pagina `Profile`, singletonul este folosit pentru a prelua si afisa draft-urile utilizatorului logat: 
 
 ``` dart
 void initState() {
