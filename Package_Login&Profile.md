@@ -7,7 +7,7 @@
 
 - Sageata dintre doua pachete arata faptul ca un pachet il importa pe altul(cel cu sageata inspre el). De exemplu, "PoemList" foloseste "Poem". M-am orientat dupa importurile de la inceputul fiecarui fisier pentru a trasa corect sagetile;
 
-- Nu am inclus pachete default, doar cele create in aplicatie de noi. SIngurul exemplu inclus este "firebase_options" pentru a arata conexiunea cu Firebase;
+- Nu am inclus pachete mai abstracte, precum cele folosite din Firebase sau Google, doar cele create de noi.
 
 - Pentru variabile, simbolul "+" semnifica faptul ca variabila este publica, iar "-" este pentru variabilele private;
 
