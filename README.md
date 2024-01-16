@@ -24,7 +24,7 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 - [Sequence Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/firtestore-rules-sequence-diagram.md) for Firestore security rules (Mircea)
 - [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCase_Login%26Profile.md) for login and profile (Andrei)
 - [Package Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Package_Login%26Profile.md) for login and profile (Andrei)
-- [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Compose%20poem%20use%20case%20diagram.png) for compose page (Alex)
+- [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCase_Poems.md) for compose page (Alex)
 
 ### Documentation
 
