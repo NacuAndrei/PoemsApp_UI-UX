@@ -6,7 +6,7 @@ Un Service Locator este un design pattern care permite obținerea de referințe 
 
 `get_it` este un pachet pentru Flutter care funcționează ca un Service Locator. Este esențial în Flutter pentru a separa interfețele de implementările concrete și pentru a facilita accesul la aceste implementări în întreaga aplicație. Acest lucru este util în special pentru accesarea serviciilor. 
 
-Aplicatia noastra utilizeaza `get_it` pentru a inregistra servicii care lucreaza cu baza de date si se cupa de autentificarea userilor:
+Aplicatia noastra utilizeaza `get_it` pentru a inregistra servicii care lucreaza cu baza de date si se ocupa de autentificarea userilor:
 
 ``` dart
 // Register services
@@ -14,9 +14,47 @@ GetIt.instance.registerSingleton<AuthService>(AuthService());
 GetIt.instance.registerSingleton<DataService>(DataService());
 ```
 
-Aceste servicii se pot folosii apoi din orice componenta, avand ca avantaj ca nu este nevoie sa pasezi o instanta de la parinte la copii.
+Aceste servicii se pot folosi apoi din orice componenta, avand ca avantaj ca nu este nevoie sa pasezi o instanta de la parinte la copii. Este o practica des intalnita ca servicii precum cel de autentificare
+si cel de management al datelor sa fie o singura instanta care sa se ocupe de functionalitati in intreaga aplicatie. 
 
+De exemplu, AuthService este folosit in pagina de Login, encapsuland logica pentru:
+- logarea cu email/parola;
+``` dart
+String? message = await GetIt.instance<AuthService>()
+                              .signInWithPassword(_emailController.text,
+                                  _passwordController.text);
+                          setState(() {
+                            loading = false;
+                          });
 
+```
+- logarea cu Google;
+``` dart
+String? message = await GetIt.instance<AuthService>()
+                          .signInWithGoogle();
+                      setState(() {
+                        loading = false;
+                      });
+```
+- resetarea parolei.
+``` dart
+String? message = await GetIt.instance<AuthService>()
+                              .resetPassword(
+                                  _resetPasswordEmailController.text);
+```
+
+DataService actioneaza ca un intermediar intre Firebase si aplicatie si permite diferite interactiuni (adaugarea/stergerea unei poezii, adaugarea/stergea ei in lista de favorite) dintre utilizator si poezii. 
+In pagina profilului DataService este folosit pentru a prelua si afisa draft-urile utilizatorului logat: 
+
+``` dart
+void initState() {
+    if (userId != null) {
+      _poemDraftsStream =
+          GetIt.instance.get<DataService>().getPoemDrafts(userId ?? "");
+    }
+    super.initState();
+  }
+```
 ### Data Transfer Object (DTO)
 
 Un Data Transfer Object (DTO) este un design pattern utilizat pentru a transfera date între subsisteme ale unei aplicații. Acestea sunt deosebit de utile în scenarii cum ar fi lucrul cu baze de date Firestore, pentru a modela datele primite și pentru a trimite date înapoi.
