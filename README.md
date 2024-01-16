@@ -38,3 +38,8 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 ### Design Patterns
 
 - [Design Patterns](https://github.com/NacuAndrei/Poems_App/blob/main/design-patterns.md)
+
+
+### Demo
+
+- [Demo](https://www.youtube.com/watch?v=Pp6kl1O_rG8)
