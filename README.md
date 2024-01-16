@@ -25,6 +25,7 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 - [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCase_Login%26Profile.md) for login and profile (Andrei)
 - [Package Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Package_Login%26Profile.md) for login and profile (Andrei)
 - [Use Case Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/UseCase_Poems.md) for compose page (Alex)
+- [Component Diagram](https://github.com/NacuAndrei/Poems_App/blob/main/Components_Poem.md) for poems (Alex)
 
 ### Documentation
 
@@ -32,7 +33,7 @@ Utilizatorul are in pagina de profil o poza de profil, o descriere si o lista cu
 
 - Mircea: Firestore database and security rules. Firebase auth.
 - Andrei: UI and some basic functionalities for Login
-- Alex:
+- Alex: Functionality for poem composition ,publishing, display
 
 ### Design Patterns
 
