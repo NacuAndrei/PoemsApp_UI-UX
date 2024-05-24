@@ -48,17 +48,17 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               GetIt.instance.get<AuthService>().getUserDisplayName() ??
                   "Unknown",
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 8.0),
             Text(
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 32.0),
             Text(
               "Poems",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
             const SizedBox(height: 8.0),
             Expanded(
