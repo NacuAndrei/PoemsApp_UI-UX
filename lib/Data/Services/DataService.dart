@@ -122,41 +122,38 @@ class DataService {
   // New methods for liking and unliking poems
 
   Future<void> likePoem(String userId, String poemId) async {
-    try {
-      DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
-      await _db.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(poemRef);
-        if (!snapshot.exists) {
-          throw Exception("Poem does not exist!");
-        }
-        int newLikesCount =
-            (snapshot.data() as Map<String, dynamic>)['likesCount'] + 1;
-        transaction.update(poemRef, {'likesCount': newLikesCount});
-      });
-    } catch (e) {
-      print(e);
-    }
+    DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
+    DocumentReference userLikeRef = poemRef.collection('likes').doc(userId);
+
+    await _db.runTransaction((transaction) async {
+      DocumentSnapshot userLikeSnapshot = await transaction.get(userLikeRef);
+      if (!userLikeSnapshot.exists) {
+        transaction.set(userLikeRef, {'likedAt': FieldValue.serverTimestamp()});
+        transaction.update(poemRef, {'likesCount': FieldValue.increment(1)});
+      }
+    });
   }
 
   Future<void> unlikePoem(String userId, String poemId) async {
-    try {
-      DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
-      await _db.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(poemRef);
-        if (!snapshot.exists) {
-          throw Exception("Poem does not exist!");
-        }
-        int newLikesCount =
-            (snapshot.data() as Map<String, dynamic>)['likesCount'] - 1;
-        transaction.update(poemRef, {'likesCount': newLikesCount});
-      });
-    } catch (e) {
-      print(e);
-    }
+    DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
+    DocumentReference userLikeRef = poemRef.collection('likes').doc(userId);
+
+    await _db.runTransaction((transaction) async {
+      DocumentSnapshot userLikeSnapshot = await transaction.get(userLikeRef);
+      if (userLikeSnapshot.exists) {
+        transaction.delete(userLikeRef);
+        transaction.update(poemRef, {'likesCount': FieldValue.increment(-1)});
+      }
+    });
   }
 
   Future<bool> isPoemLiked(String userId, String poemId) async {
-    return (await _db.collection('Users/$userId/LikedPoems').doc(poemId).get())
-        .exists;
+    DocumentSnapshot userLikeSnapshot = await _db
+        .collection('PublicPoems')
+        .doc(poemId)
+        .collection('likes')
+        .doc(userId)
+        .get();
+    return userLikeSnapshot.exists;
   }
 }

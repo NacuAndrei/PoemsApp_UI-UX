@@ -23,23 +23,27 @@ class _PoemViewState extends State<PoemView> {
 
   @override
   void initState() {
-    if (!widget.isDraft) {
-      () async {
-        String? userId = GetIt.instance<AuthService>().getUserId();
-        if (userId == null || widget.poem.id == null) {
-          throw Exception("User or poem id is null in initState");
-        }
-        bool _isFavourited = await GetIt.instance<DataService>()
-            .isPoemFavourited(userId, widget.poem.id as String);
-        bool _isLiked = await GetIt.instance<DataService>()
-            .isPoemLiked(userId, widget.poem.id as String);
-        setState(() {
-          isFavourited = _isFavourited;
-          isLiked = _isLiked;
-        });
-      }();
-    }
     super.initState();
+    if (!widget.isDraft) {
+      _initializeLikeAndFavouriteState();
+    }
+  }
+
+  Future<void> _initializeLikeAndFavouriteState() async {
+    String? userId = GetIt.instance<AuthService>().getUserId();
+    if (userId == null || widget.poem.id == null) {
+      throw Exception("User or poem id is null in initState");
+    }
+
+    bool _isFavourited = await GetIt.instance<DataService>()
+        .isPoemFavourited(userId, widget.poem.id as String);
+    bool _isLiked = await GetIt.instance<DataService>()
+        .isPoemLiked(userId, widget.poem.id as String);
+
+    setState(() {
+      isFavourited = _isFavourited;
+      isLiked = _isLiked;
+    });
   }
 
   @override
@@ -306,7 +310,7 @@ class _PoemViewState extends State<PoemView> {
             }
 
             return AlertDialog(
-              title: const Text("Are you sure you want to delete the poem?"),
+              title: const Text("Are you sure you want to delete the pome?"),
               actions: [
                 TextButton(
                     onPressed: () => Navigator.of(context).pop(),

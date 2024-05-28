@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PoemModel {
-  PoemModel(
-      {this.id,
-      required this.title,
-      required this.content,
-      this.photoURL,
-      this.isPublished = false,
-      this.likesCount = 0});
+  PoemModel({
+    this.id,
+    required this.title,
+    required this.content,
+    this.photoURL,
+    this.isPublished = false,
+    this.likesCount = 0,
+  });
 
   final String? id;
   final String title;
