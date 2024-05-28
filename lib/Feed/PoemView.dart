@@ -19,6 +19,7 @@ class PoemView extends StatefulWidget {
 
 class _PoemViewState extends State<PoemView> {
   bool isFavourited = false;
+  bool isLiked = false;
 
   @override
   void initState() {
@@ -30,8 +31,11 @@ class _PoemViewState extends State<PoemView> {
         }
         bool _isFavourited = await GetIt.instance<DataService>()
             .isPoemFavourited(userId, widget.poem.id as String);
+        bool _isLiked = await GetIt.instance<DataService>()
+            .isPoemLiked(userId, widget.poem.id as String);
         setState(() {
           isFavourited = _isFavourited;
+          isLiked = _isLiked;
         });
       }();
     }
@@ -45,7 +49,8 @@ class _PoemViewState extends State<PoemView> {
         actions: [
           _getPublishButton(),
           _getFavouriteButton(),
-          _getDeleteButton(context)
+          _getLikeButton(),
+          _getDeleteButton(context),
         ],
       ),
       body: SingleChildScrollView(
@@ -233,17 +238,50 @@ class _PoemViewState extends State<PoemView> {
     );
   }
 
+  Widget _getLikeButton() {
+    if (widget.isDraft) {
+      return Container();
+    }
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(isLiked ? Icons.thumb_up : Icons.thumb_up_outlined),
+          tooltip: isLiked ? "Unlike" : "Like",
+          onPressed: () async {
+            String? userId = GetIt.instance<AuthService>().getUserId();
+            if (userId == null || widget.poem.id == null) {
+              throw Exception("User or poem id is null");
+            }
+            if (isLiked) {
+              await GetIt.instance<DataService>()
+                  .unlikePoem(userId, widget.poem.id as String);
+            } else {
+              await GetIt.instance<DataService>()
+                  .likePoem(userId, widget.poem.id as String);
+            }
+
+            setState(() {
+              isLiked = !isLiked;
+              widget.poem.likesCount += isLiked ? 1 : -1;
+            });
+          },
+        ),
+        Text('${widget.poem.likesCount}'),
+      ],
+    );
+  }
+
   Widget _getDeleteButton(BuildContext context) {
     final String userId = GetIt.instance<AuthService>().getUserId() ?? "";
     final bool userIsAuthor = widget.isDraft ||
         (widget.poem as PublishedPoemModel).user.userId == userId;
 
-    // if current user is not the author, dont display button
+    // if current user is not the author, don't display button
     if (!userIsAuthor) {
       return Container();
     }
 
-    // its either user's draft or published poem
+    // it's either user's draft or published poem
     return ElevatedButton(
       onPressed: () {
         _showDeleteDialog(context);

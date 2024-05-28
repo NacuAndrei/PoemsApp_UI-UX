@@ -9,10 +9,10 @@ import 'package:poetry_app/Data/Models/PublishedPoemModel.dart';
 
 @singleton
 class DataService {
-  // instance of firestore database
+  // Instance of firestore database
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // instance of firebase storage (used to upload files)
+  // Instance of firebase storage (used to upload files)
   final _storage = FirebaseStorage.instance;
 
   Future<void> addPoemDraft(String userId, PoemModel poem, File? photo) async {
@@ -117,5 +117,46 @@ class DataService {
       transaction.delete(draftRef);
       transaction.delete(publicPoemRef);
     });
+  }
+
+  // New methods for liking and unliking poems
+
+  Future<void> likePoem(String userId, String poemId) async {
+    try {
+      DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
+      await _db.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(poemRef);
+        if (!snapshot.exists) {
+          throw Exception("Poem does not exist!");
+        }
+        int newLikesCount =
+            (snapshot.data() as Map<String, dynamic>)['likesCount'] + 1;
+        transaction.update(poemRef, {'likesCount': newLikesCount});
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> unlikePoem(String userId, String poemId) async {
+    try {
+      DocumentReference poemRef = _db.collection('PublicPoems').doc(poemId);
+      await _db.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(poemRef);
+        if (!snapshot.exists) {
+          throw Exception("Poem does not exist!");
+        }
+        int newLikesCount =
+            (snapshot.data() as Map<String, dynamic>)['likesCount'] - 1;
+        transaction.update(poemRef, {'likesCount': newLikesCount});
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> isPoemLiked(String userId, String poemId) async {
+    return (await _db.collection('Users/$userId/LikedPoems').doc(poemId).get())
+        .exists;
   }
 }
