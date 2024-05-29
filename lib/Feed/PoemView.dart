@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poetry_app/Data/Models/PoemModel.dart';
@@ -20,7 +21,7 @@ class PoemView extends StatefulWidget {
 class _PoemViewState extends State<PoemView> {
   bool isFavourited = false;
   bool isLiked = false;
-
+  final TextEditingController _commentController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -55,6 +56,7 @@ class _PoemViewState extends State<PoemView> {
           _getFavouriteButton(),
           _getLikeButton(),
           _getDeleteButton(context),
+          _getCommentButton(),
         ],
       ),
       body: SingleChildScrollView(
@@ -68,6 +70,7 @@ class _PoemViewState extends State<PoemView> {
               _getAuthorWidget(),
               _getImageWidget(),
               _getContentWidget(),
+              _getCommentsSection(),
             ],
           ),
         ),
@@ -349,6 +352,104 @@ class _PoemViewState extends State<PoemView> {
               ],
             );
           },
+        );
+      },
+    );
+  }
+
+  Widget _getCommentsSection() {
+    if (widget.isDraft) return Container();
+    return Column(
+      children: [
+        const Divider(),
+        _getCommentsList(),
+      ],
+    );
+  }
+
+  Widget _getCommentsList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: GetIt.instance<DataService>().getComments(widget.poem.id!),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Error loading comments");
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        return ListView(
+          shrinkWrap: true,
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> comment =
+                document.data()! as Map<String, dynamic>;
+            return ListTile(
+              title: Text(comment['userName']),
+              subtitle: Text(comment['comment']),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _getCommentButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: IconButton(
+        icon: Icon(Icons.comment), // Icon representing a comment
+        onPressed: () => _showCommentModal(context),
+      ),
+    );
+  }
+
+  void _showCommentModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _commentController,
+                  decoration: const InputDecoration(
+                    labelText: 'Add a comment...',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: null,
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_commentController.text.isNotEmpty) {
+                      String? userId =
+                          GetIt.instance<AuthService>().getUserId();
+                      String? userName = GetIt.instance<AuthService>()
+                          .getCurrentUserData()
+                          ?.userName;
+                      if (userId == null ||
+                          userName == null ||
+                          widget.poem.id == null) {
+                        throw Exception("User or poem id is null");
+                      }
+                      await GetIt.instance<DataService>().addComment(
+                        widget.poem.id!,
+                        userId,
+                        userName,
+                        _commentController.text,
+                      );
+                      _commentController.clear();
+                      Navigator.pop(context); // Close the modal
+                    }
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

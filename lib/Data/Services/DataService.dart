@@ -156,4 +156,25 @@ class DataService {
         .get();
     return userLikeSnapshot.exists;
   }
+
+  Future<void> addComment(
+      String poemId, String userId, String userName, String comment) async {
+    DocumentReference commentRef =
+        _db.collection('PublicPoems').doc(poemId).collection('comments').doc();
+    await commentRef.set({
+      'userId': userId,
+      'userName': userName,
+      'comment': comment,
+      'commentedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getComments(String poemId) {
+    return _db
+        .collection('PublicPoems')
+        .doc(poemId)
+        .collection('comments')
+        .orderBy('commentedAt', descending: true)
+        .snapshots();
+  }
 }
